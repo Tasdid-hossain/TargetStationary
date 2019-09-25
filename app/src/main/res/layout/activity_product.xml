@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home.MainActivity">
+    tools:context=".ProductActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:id="@+id/relativeLayout2"
             android:layout_below="@+id/relativeLayout1">
 
-            <include layout="@layout/layout_center_viewpager"/>
+            <include layout="@layout/content_categories"/>
 
         </RelativeLayout>
 
