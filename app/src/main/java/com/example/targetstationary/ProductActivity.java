@@ -1,12 +1,12 @@
 package com.example.targetstationary;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +18,9 @@ import android.widget.Toast;
 
 import com.example.targetstationary.Interface.ItemClickListener;
 import com.example.targetstationary.Model.CategoryModel;
-import com.example.targetstationary.Search.SearchActivity;
+import com.example.targetstationary.Model.ProductModel;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
+import com.example.targetstationary.ViewHolder.CategoryViewHolder;
 import com.example.targetstationary.ViewHolder.ProductViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -32,18 +33,19 @@ import com.squareup.picasso.Picasso;
 public class ProductActivity extends AppCompatActivity {
 
     private static final String TAG = "ProductActivity";
-    private static final int ACTIVITY_NUM =1;
 
     FirebaseDatabase database;
-    DatabaseReference category;
-    Query categoryQuery;
+    DatabaseReference product;
+    Query productQuery;
 
-    RecyclerView recycler_categories;
+    String CategoryID;
+
+    RecyclerView recycler_product;
     RecyclerView.LayoutManager layoutManager;
-    FirebaseRecyclerAdapter<CategoryModel, ProductViewHolder> adapter;
+    FirebaseRecyclerAdapter<ProductModel, ProductViewHolder> adapterProduct;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
         Log.d(TAG, "onCreate: Started");
@@ -51,35 +53,46 @@ public class ProductActivity extends AppCompatActivity {
 
         /*Init Firebase*/
         database = FirebaseDatabase.getInstance();
-        category = database.getReference().child("Category");
-        categoryQuery = category.orderByKey();
+        product = database.getReference().child("Product");
+        productQuery = product;
 
         /*Load category*/
-        recycler_categories = (RecyclerView) findViewById(R.id.recycler_categories);
+        recycler_product = (RecyclerView) findViewById(R.id.recycler_product);
         layoutManager = new LinearLayoutManager(this);
-        recycler_categories.setHasFixedSize(true);
-        recycler_categories.setLayoutManager(new GridLayoutManager(this,2));
+        recycler_product.setHasFixedSize(true);
+        recycler_product.setLayoutManager(new GridLayoutManager(this,2));
 
-        loadCategory();
+        /*Get the intent*/
+        if(getIntent() != null)
+            CategoryID = getIntent().getStringExtra("CategoryID");
+        if(!CategoryID.isEmpty())
+        {
+            loadProduct(CategoryID);
+        }
 
-        recycler_categories.setAdapter(adapter);
+        recycler_product.setAdapter(adapterProduct);
     }
 
-    /*Create firebaserecycleroptions and firebase recycler adapter. Then load that into recyclerview*/
-    private void loadCategory(){
-        FirebaseRecyclerOptions categoryOptions = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(categoryQuery, CategoryModel.class).build();
+    private void loadProduct(String categoryID) {
 
-        adapter = new FirebaseRecyclerAdapter<CategoryModel, ProductViewHolder>(categoryOptions) {
+        FirebaseRecyclerOptions productOptions = new FirebaseRecyclerOptions.Builder<ProductModel>().setQuery(productQuery.orderByChild("CategoryID").equalTo(categoryID),
+                ProductModel.class).build();
+
+        adapterProduct = new FirebaseRecyclerAdapter<ProductModel, ProductViewHolder>(productOptions) {
+
+
             @Override
-            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull CategoryModel model) {
+            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull ProductModel model) {
                 holder.textProductName.setText(model.getName());
                 Picasso.get().load(model.getImage()).into(holder.imageViewProduct);
+                holder.textProductPrice.setText(model.getPrice());
 
-                final CategoryModel clickItem = model;
+                final ProductModel clickItem = model;
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
                         Toast.makeText(ProductActivity.this, ""+clickItem.getName(), Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }
@@ -97,13 +110,13 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
+        adapterProduct.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        adapter.stopListening();
+        adapterProduct.stopListening();
     }
 
     /*BottomNavigationView Setup*/
@@ -112,7 +125,6 @@ public class ProductActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.enableNavigation(ProductActivity.this,bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
+
     }
 }

@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_category">
+    tools:showIn="@layout/activity_product">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycler_categories"
+        android:id="@+id/recycler_product"
         android:scrollbars="vertical">
 
     </androidx.recyclerview.widget.RecyclerView>

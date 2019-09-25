@@ -6,8 +6,8 @@ import android.view.MenuItem;
 
 import com.example.targetstationary.Account.AccountActivity;
 import com.example.targetstationary.Cart.CartActivity;
+import com.example.targetstationary.CategoryActivity;
 import com.example.targetstationary.Home.MainActivity;
-import com.example.targetstationary.ProductActivity;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Search.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,7 +28,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent1);
                         break;
                     case R.id.ic_product:
-                        Intent intent2 = new Intent(context, ProductActivity.class); //ACTIVITY_NUM = 1
+                        Intent intent2 = new Intent(context, CategoryActivity.class); //ACTIVITY_NUM = 1
                         context.startActivity(intent2);
                         break;
                     case R.id.ic_search:

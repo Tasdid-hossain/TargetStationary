@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProductActivity">
+    tools:context=".CategoryActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout3">
+            android:id="@+id/relativeLayout1">
 
             <include layout="@layout/layout_top_tabs"/>
 
@@ -25,10 +25,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/relativeLayout2"
-            android:layout_below="@+id/relativeLayout3"
+            android:layout_below="@+id/relativeLayout1"
             android:layout_marginTop="80dp">
 
-            <include layout="@layout/content_products"/>
+            <include layout="@layout/content_categories"/>
 
         </RelativeLayout>
 

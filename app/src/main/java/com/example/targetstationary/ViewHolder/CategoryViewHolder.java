@@ -10,20 +10,18 @@ import com.example.targetstationary.R;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+public class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    public TextView textProductName;
-    public ImageView imageViewProduct;
-    public TextView textProductPrice;
+    public TextView textCategoryName;
+    public ImageView imageViewCategory;
 
     private ItemClickListener itemClickListener;
 
-    public ProductViewHolder(@NonNull View itemView) {
+    public CategoryViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        textProductName = (TextView) itemView.findViewById(R.id.product_name);
-        imageViewProduct = (ImageView) itemView.findViewById(R.id.product_image);
-        textProductPrice = (TextView) itemView.findViewById(R.id.product_price);
+        textCategoryName = (TextView) itemView.findViewById(R.id.category_name);
+        imageViewCategory = (ImageView) itemView.findViewById(R.id.category_image);
 
         itemView.setOnClickListener(this);
     }
@@ -36,4 +34,5 @@ public class ProductViewHolder extends RecyclerView.ViewHolder implements View.O
     public void onClick(View v) {
         itemClickListener.onClick(itemView, getAdapterPosition(), false);
     }
+
 }
