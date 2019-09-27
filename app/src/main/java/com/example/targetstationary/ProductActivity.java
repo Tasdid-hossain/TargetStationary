@@ -62,7 +62,7 @@ public class ProductActivity extends AppCompatActivity {
         recycler_product.setHasFixedSize(true);
         recycler_product.setLayoutManager(new GridLayoutManager(this,2));
 
-        /*Get the intent*/
+        /*Get the intent data which is sent from CategoryActivit*/
         if(getIntent() != null)
             CategoryID = getIntent().getStringExtra("CategoryID");
         if(!CategoryID.isEmpty())
@@ -74,10 +74,12 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     private void loadProduct(String categoryID) {
-
+        /*This is basically a query that will be included when creating the adapter. Matches the categoryID with the */
         FirebaseRecyclerOptions productOptions = new FirebaseRecyclerOptions.Builder<ProductModel>().setQuery(productQuery.orderByChild("CategoryID").equalTo(categoryID),
                 ProductModel.class).build();
 
+        /*The firebase recycler adapter. which takes the products depending on the category from the firebase.
+        * It creates a recycler view and shows*/
         adapterProduct = new FirebaseRecyclerAdapter<ProductModel, ProductViewHolder>(productOptions) {
 
 
@@ -93,6 +95,10 @@ public class ProductActivity extends AppCompatActivity {
                     public void onClick(View view, int position, boolean isLongClick) {
                         Toast.makeText(ProductActivity.this, ""+clickItem.getName(), Toast.LENGTH_SHORT).show();
 
+                        /*Goes into Product Details*/
+                        Intent prodDetails = new Intent(ProductActivity.this, ProductDetails.class);
+                        prodDetails.putExtra("ProductID", adapterProduct.getRef(position).getKey());
+                        startActivity(prodDetails);
                     }
                 });
             }
@@ -106,7 +112,7 @@ public class ProductActivity extends AppCompatActivity {
         };
     }
 
-    /*Must include on start and on stop for firebaserecycleradapter*/
+    /*Must include onstart and onstop for firebaserecycleradapter*/
     @Override
     protected void onStart() {
         super.onStart();
