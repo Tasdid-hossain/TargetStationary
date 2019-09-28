@@ -2,6 +2,8 @@ package com.example.targetstationary;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+import me.relex.circleindicator.CircleIndicator;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.targetstationary.Model.ImageListModel;
 import com.example.targetstationary.Model.ProductModel;
+import com.example.targetstationary.ViewHolder.MyPager;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,9 +30,14 @@ public class ProductDetails extends AppCompatActivity {
    // ImageView singleProduct_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
     ElegantNumberButton numberButton;
-    /*Creating slider*/
-    ImageListModel imageListModel;
-    private ImageView singleProduct_image;
+
+    /*VIEWPAGER*/
+    private ViewPager viewPager;
+    private CircleIndicator circleIndicator;
+    private MyPager myPager;
+
+//    private ImageView singleProduct_image;!!!!!!!!!!!!!!!!!!!!!!
+
     ImageView imageView1, imageView2,imageView3,imageView4;
     public HashMap<String, String> file_maps ;
 
@@ -52,11 +60,12 @@ public class ProductDetails extends AppCompatActivity {
         singleProduct_description = (TextView) findViewById(R.id.singleProduct_description);
         singleProduct_name = (TextView) findViewById(R.id.singleProduct_name);
         singleProduct_price = (TextView) findViewById(R.id.singleProduct_price);
-//        singleProduct_image = (ImageView) findViewById(R.id.image_singleProduct);
-        imageView1=(ImageView) findViewById(R.id.imageview1);
+//        singleProduct_image = (ImageView) findViewById(R.id.image_singleProduct);!!!!!!!!!!!!!!!!!!
+
+      /*  imageView1=(ImageView) findViewById(R.id.imageview1);
         imageView2=(ImageView) findViewById(R.id.imageview2);
         imageView3=(ImageView) findViewById(R.id.imageview3);
-        imageView4=(ImageView) findViewById(R.id.imageview4);
+        imageView4=(ImageView) findViewById(R.id.imageview4);*/
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppbar);
@@ -82,10 +91,20 @@ public class ProductDetails extends AppCompatActivity {
                 ImageListModel imageListModel = dataSnapshot.child("imageList").getValue(ImageListModel.class);
 
                 /*Set Image*/
-                Picasso.get().load(imageListModel.getImage1()).into(imageView1);
+/*                Picasso.get().load(imageListModel.getImage1()).into(imageView1);
                 Picasso.get().load(imageListModel.getImage2()).into(imageView2);
                 Picasso.get().load(imageListModel.getImage3()).into(imageView3);
-                Picasso.get().load(imageListModel.getImage4()).into(imageView4);
+                Picasso.get().load(imageListModel.getImage4()).into(imageView4);*/
+
+                myPager = new MyPager(getBaseContext());
+                myPager.images.add(imageListModel.getImage1());
+                myPager.images.add(imageListModel.getImage2());
+                myPager.images.add(imageListModel.getImage3());
+                myPager.images.add(imageListModel.getImage4());
+                viewPager = findViewById(R.id.view_pager);
+                viewPager.setAdapter(myPager);
+                circleIndicator = findViewById(R.id.circle);
+                circleIndicator.setViewPager(viewPager);
 
 
                 collapsingToolbarLayout.setTitle(productModel.getName());

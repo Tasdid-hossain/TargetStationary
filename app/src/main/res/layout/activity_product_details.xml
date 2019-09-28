@@ -22,37 +22,50 @@
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleTextAppearance="@android:color/transparent">
 
-            <ViewFlipper
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/viewflipper"
-                android:flipInterval="2000"
-                android:autoStart="true">
+                android:layout_height="match_parent" />
 
-                 <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageview1"
-                    android:scaleType="centerCrop"/>
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/view_pager"
+                android:layout_centerHorizontal="true"
+                android:padding="16dp" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageview2"
-                    android:scaleType="centerCrop"/>
+<!--            <ViewFlipper-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:id="@+id/viewflipper"-->
+<!--                android:flipInterval="2000"-->
+<!--                android:autoStart="true">-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageview3"
-                    android:scaleType="centerCrop"/>
+<!--                 <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:id="@+id/imageview1"-->
+<!--                    android:scaleType="centerCrop"/>-->
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageview4"
-                    android:scaleType="centerCrop"/>
-            </ViewFlipper>
+<!--                <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:id="@+id/imageview2"-->
+<!--                    android:scaleType="centerCrop"/>-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:id="@+id/imageview3"-->
+<!--                    android:scaleType="centerCrop"/>-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:id="@+id/imageview4"-->
+<!--                    android:scaleType="centerCrop"/>-->
+<!--            </ViewFlipper>-->
 
 <!--            <ImageView-->
 <!--                android:layout_width="match_parent"-->
