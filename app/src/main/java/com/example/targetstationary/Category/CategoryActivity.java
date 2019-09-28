@@ -1,4 +1,4 @@
-package com.example.targetstationary;
+package com.example.targetstationary.Category;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.example.targetstationary.Interface.ItemClickListener;
 import com.example.targetstationary.Model.CategoryModel;
+import com.example.targetstationary.ProductActivity;
+import com.example.targetstationary.R;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.CategoryViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;

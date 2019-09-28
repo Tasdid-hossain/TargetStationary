@@ -22,14 +22,46 @@
             app:contentScrim="@color/colorPrimary"
             app:expandedTitleTextAppearance="@android:color/transparent">
 
-            <ImageView
+            <ViewFlipper
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/image_singleProduct"
-                android:contentDescription="@null"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax"/>
-            
+                android:id="@+id/viewflipper"
+                android:flipInterval="2000"
+                android:autoStart="true">
+
+                 <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imageview1"
+                    android:scaleType="centerCrop"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imageview2"
+                    android:scaleType="centerCrop"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imageview3"
+                    android:scaleType="centerCrop"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/imageview4"
+                    android:scaleType="centerCrop"/>
+            </ViewFlipper>
+
+<!--            <ImageView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:id="@+id/image_singleProduct"-->
+<!--                android:contentDescription="@null"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                app:layout_collapseMode="parallax"/>-->
+
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"

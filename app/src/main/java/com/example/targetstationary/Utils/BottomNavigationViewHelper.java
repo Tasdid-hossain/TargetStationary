@@ -6,7 +6,7 @@ import android.view.MenuItem;
 
 import com.example.targetstationary.Account.AccountActivity;
 import com.example.targetstationary.Cart.CartActivity;
-import com.example.targetstationary.CategoryActivity;
+import com.example.targetstationary.Category.CategoryActivity;
 import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Search.SearchActivity;

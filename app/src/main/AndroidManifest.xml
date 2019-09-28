@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ProductDetails"></activity>
         <activity android:name=".ProductActivity" />
-        <activity android:name=".CategoryActivity" />
+        <activity android:name=".Category.CategoryActivity" />
         <activity android:name=".Home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,4 +24,9 @@
         <activity android:name=".Account.AccountActivity" />
     </application>
 
+    <!-- if you want to load images from the internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- if you want to load images from a file OR from the internet -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 </manifest>

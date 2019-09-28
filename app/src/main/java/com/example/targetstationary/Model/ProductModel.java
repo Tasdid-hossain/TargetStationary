@@ -6,13 +6,15 @@ public class ProductModel {
     private String Description;
     private String Price;
     private String CategoryID;
+    private ImageListModel imageList;
 
-    public ProductModel(String name, String image, String description, String price, String categoryID) {
+    public ProductModel(String name, String image, String description, String price, String categoryID, ImageListModel i) {
         Name = name;
         Image = image;
         Description = description;
         Price = price;
         CategoryID=categoryID;
+        imageList = i;
     }
 
     public ProductModel() {
@@ -56,5 +58,13 @@ public class ProductModel {
 
     public void setPrice(String price) {
         Price = price;
+    }
+
+    public ImageListModel getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(ImageListModel imageList) {
+        this.imageList = imageList;
     }
 }
