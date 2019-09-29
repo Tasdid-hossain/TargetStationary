@@ -70,6 +70,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
 
         Locale locale = new Locale("en", "us");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
+
+        /*Needs to be multiplied by quantity later on*/
         int price = (Integer.parseInt(listData.get(position).getPrice().replaceAll("[^0-9]","")));
         holder.txt_price.setText(fmt.format(price));
         holder.txt_cart_name.setText(listData.get(position).getProductName());
