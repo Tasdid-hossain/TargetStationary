@@ -160,6 +160,12 @@
                         app:finalNumber="30"
                         />
 
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add to cart"
+                        android:id="@+id/btnCart"/>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

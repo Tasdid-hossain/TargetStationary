@@ -5,14 +5,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import me.relex.circleindicator.CircleIndicator;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.example.targetstationary.Cart.CartActivity;
 import com.example.targetstationary.Model.ImageListModel;
+import com.example.targetstationary.Model.OrderModel;
 import com.example.targetstationary.Model.ProductModel;
 import com.example.targetstationary.ViewHolder.MyPager;
+import com.example.targetstationary.database.Database;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +37,8 @@ public class ProductDetails extends AppCompatActivity {
    // ImageView singleProduct_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
     ElegantNumberButton numberButton;
+    Button cartBtn;
+    ProductModel currentProduct;
 
     /*VIEWPAGER*/
     private ViewPager viewPager;
@@ -60,6 +69,9 @@ public class ProductDetails extends AppCompatActivity {
         singleProduct_description = (TextView) findViewById(R.id.singleProduct_description);
         singleProduct_name = (TextView) findViewById(R.id.singleProduct_name);
         singleProduct_price = (TextView) findViewById(R.id.singleProduct_price);
+        cartBtn =(Button) findViewById(R.id.btnCart);
+
+
 //        singleProduct_image = (ImageView) findViewById(R.id.image_singleProduct);!!!!!!!!!!!!!!!!!!
 
       /*  imageView1=(ImageView) findViewById(R.id.imageview1);
@@ -80,6 +92,19 @@ public class ProductDetails extends AppCompatActivity {
         {
             getDetailProduct(ProductID);
         }
+
+        cartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Database(getBaseContext()).addToCart(new OrderModel(
+                        ProductID, currentProduct.getName(),  currentProduct.getPrice(), "10"
+                ));
+
+                Toast.makeText(ProductDetails.this, "Added to cart", Toast.LENGTH_SHORT).show();
+                Intent prodDetails = new Intent(ProductDetails.this, CartActivity.class);
+                startActivity(prodDetails);
+            }
+        });
     }
 
 
@@ -87,7 +112,7 @@ public class ProductDetails extends AppCompatActivity {
         singleProduct.child(productID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ProductModel productModel = dataSnapshot.getValue(ProductModel.class);
+                currentProduct = dataSnapshot.getValue(ProductModel.class);
                 ImageListModel imageListModel = dataSnapshot.child("imageList").getValue(ImageListModel.class);
 
                 /*Set Image*/
@@ -107,10 +132,10 @@ public class ProductDetails extends AppCompatActivity {
                 circleIndicator.setViewPager(viewPager);
 
 
-                collapsingToolbarLayout.setTitle(productModel.getName());
-                singleProduct_price.setText(productModel.getPrice());
-                singleProduct_name.setText(productModel.getName());
-                singleProduct_description.setText(productModel.getDescription());
+                collapsingToolbarLayout.setTitle(currentProduct.getName());
+                singleProduct_price.setText(currentProduct.getPrice());
+                singleProduct_name.setText(currentProduct.getName());
+                singleProduct_description.setText(currentProduct.getDescription());
             }
 
             @Override

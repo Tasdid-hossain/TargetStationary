@@ -31,7 +31,6 @@ dependencies {
     /*for Cart*/
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
-
     /*Image view pager*/
     implementation 'me.relex:circleindicator:1.2.2@aar'
 
