@@ -97,7 +97,7 @@ public class ProductDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new Database(getBaseContext()).addToCart(new OrderModel(
-                        ProductID, currentProduct.getName(),  currentProduct.getPrice(), "10"
+                        ProductID, currentProduct.getName(), numberButton.getNumber() ,currentProduct.getPrice(), "10"
                 ));
 
                 Toast.makeText(ProductDetails.this, "Added to cart", Toast.LENGTH_SHORT).show();

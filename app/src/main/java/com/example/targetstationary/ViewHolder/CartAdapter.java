@@ -28,7 +28,7 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
 
     private ItemClickListener itemClickListener;
 
-    public TextView getTxt_cart_name() {
+    public TextView setTxt_cart_name() {
         return txt_cart_name;
     }
 
@@ -72,7 +72,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
 
         /*Needs to be multiplied by quantity later on*/
-        int price = (Integer.parseInt(listData.get(position).getPrice().replaceAll("[^0-9]","")));
+        int price = (Integer.parseInt(listData.get(position).getPrice()))*(Integer.parseInt(listData.get(position).getQuantity()));
         holder.txt_price.setText(fmt.format(price));
         holder.txt_cart_name.setText(listData.get(position).getProductName());
     }

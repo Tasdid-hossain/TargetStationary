@@ -3,19 +3,19 @@ package com.example.targetstationary.Model;
 public class OrderModel {
     String ProductID;
     String ProductName;
+    String Quantity;
     String Price;
     String Discount;
-    String Quantity;
-
-    public OrderModel(String productID, String productName, String price, String discount) {
-        ProductID = productID;
-        ProductName = productName;
-        Price = price;
-        Discount = discount;
-
-    }
 
     public OrderModel() {
+    }
+
+    public OrderModel(String productID, String productName, String quantity, String price, String discount) {
+        ProductID = productID;
+        ProductName = productName;
+        Quantity = quantity;
+        Price = price;
+        Discount = discount;
     }
 
     public String getProductID() {
@@ -34,6 +34,14 @@ public class OrderModel {
         ProductName = productName;
     }
 
+    public String getQuantity() {
+        return Quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        Quantity = quantity;
+    }
+
     public String getPrice() {
         return Price;
     }
@@ -48,13 +56,5 @@ public class OrderModel {
 
     public void setDiscount(String discount) {
         Discount = discount;
-    }
-
-    public String getQuantity() {
-        return Quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        Quantity = quantity;
     }
 }

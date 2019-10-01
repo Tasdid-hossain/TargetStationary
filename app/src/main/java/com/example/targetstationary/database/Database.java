@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database extends SQLiteAssetHelper {
-    private static String DB_NAME = "Stationary.db";
+    private static String DB_NAME = "OrderDetails.db";
     private static int DB_VER = 1;
     public Database(Context context) {
         super(context, DB_NAME, null, DB_VER);
@@ -22,7 +22,7 @@ public class Database extends SQLiteAssetHelper {
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
-        String [] sqlSelect = {"ProductID", "ProductName","Price", "Discount"};
+        String [] sqlSelect = {"ProductID", "ProductName","Quantity","Price", "Discount"};
         String sqlTable = "OrderDetails";
 
         qb.setTables(sqlTable);
@@ -33,13 +33,12 @@ public class Database extends SQLiteAssetHelper {
             do {
                 result.add(new OrderModel(c.getString(c.getColumnIndex("ProductID")),
                         c.getString(c.getColumnIndex("ProductName")),
+                        c.getString(c.getColumnIndex("Quantity")),
                         c.getString(c.getColumnIndex("Price")),
                         c.getString(c.getColumnIndex("Discount"))
                         )
                 );
             }while (c.moveToNext());
-
-
         }
         return result;
     }
@@ -47,12 +46,12 @@ public class Database extends SQLiteAssetHelper {
     public void addToCart(OrderModel orderModel)
     {
         SQLiteDatabase db = getReadableDatabase();
-        String query = String.format("Insert into OrderDetails (ProductID,ProductName,Price,Discount) VALUES ('%s','%s','%s','%s');",
+        String query = String.format("Insert into OrderDetails (ProductID,ProductName,Quantity,Price,Discount) VALUES ('%s','%s','%s','%s','%s');",
                 orderModel.getProductID(),
                 orderModel.getProductName(),
+                orderModel.getQuantity(),
                 orderModel.getPrice(),
-                orderModel.getDiscount(),
-                orderModel.getQuantity());
+                orderModel.getDiscount());                ;
 
         db.execSQL(query);
     }
