@@ -71,6 +71,8 @@ public class CartActivity extends AppCompatActivity {
     private void loadListProduct(){
         cart = new Database(this).getCarts();
         adapter = new CartAdapter(cart, this);
+        adapter.notifyDataSetChanged();
+
         recyclerViewCart.setAdapter(adapter);
 
         int total= 0;
@@ -81,5 +83,21 @@ public class CartActivity extends AppCompatActivity {
         Locale locale = new Locale("en", "us");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
         totalPrice.setText(fmt.format(total));
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if(item.getTitle().equals("Delete"))
+            deleteCart(item.getOrder());
+        return true;
+    }
+
+    private void deleteCart(int position){
+        cart.remove(position);
+        new Database(this).cleanCart();
+        for(OrderModel item:cart){
+            new Database(this).addToCart(item);
+        }
+        loadListProduct();
     }
 }
