@@ -27,7 +27,80 @@
             android:id="@+id/relativeLayout2"
             android:layout_below="@+id/relativeLayout1">
 
-            <include layout="@layout/layout_center_viewpager"/>
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pagerMain"
+                android:layout_width="match_parent"
+                android:layout_height="175dp"
+                android:layout_margin="10dp"/>
+
+            <me.relex.circleindicator.CircleIndicator
+                android:id="@+id/circleMain"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_height="36dp"
+                android:layout_alignBottom="@id/view_pagerMain"
+                android:layout_centerHorizontal="true"
+                app:ci_width="10dp"
+                app:ci_height="10dp"
+                app:ci_drawable="@drawable/circleindicator_round"
+                android:padding="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/circleMain"
+                android:id="@+id/textMain"
+                android:text="Useful Info"
+                android:layout_marginLeft="20dp"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/preSchoolImage"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FF000000"
+                android:layout_below="@id/textMain"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/preschool"/>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/secondaryschoolImage"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FF000000"
+                android:layout_below="@id/textMain"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@id/preSchoolImage"
+                android:src="@drawable/secondaryschool"/>
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/primaryschoolImage"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FF000000"
+                android:layout_below="@id/textMain"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@id/secondaryschoolImage"
+                android:src="@drawable/primaryschool"/>
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/collegeuniImage"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FF000000"
+                android:layout_below="@id/textMain"
+                android:layout_margin="10dp"
+                android:layout_toRightOf="@id/primaryschoolImage"
+                android:src="@drawable/collegeuni"/>
 
         </RelativeLayout>
 

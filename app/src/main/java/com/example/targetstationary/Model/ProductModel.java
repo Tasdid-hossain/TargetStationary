@@ -1,6 +1,9 @@
 package com.example.targetstationary.Model;
 
-public class ProductModel {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ProductModel implements Parcelable {
     private String Name;
     private String Image;
     private String Description;
@@ -17,8 +20,28 @@ public class ProductModel {
         imageList = i;
     }
 
+    public ProductModel(Parcel in) {
+        Name = in.readString();
+        Image = in.readString();
+        Description = in.readString();
+        Price = in.readString();
+        CategoryID = in.readString();
+    }
+
     public ProductModel() {
     }
+
+    public static final Creator<ProductModel> CREATOR = new Creator<ProductModel>() {
+        @Override
+        public ProductModel createFromParcel(Parcel in) {
+            return new ProductModel(in);
+        }
+
+        @Override
+        public ProductModel[] newArray(int size) {
+            return new ProductModel[size];
+        }
+    };
 
     public String getCategoryID() {
         return CategoryID;
@@ -66,5 +89,20 @@ public class ProductModel {
 
     public void setImageList(ImageListModel imageList) {
         this.imageList = imageList;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(Name);
+        dest.writeString(Image);
+        dest.writeString(Description);
+        dest.writeString(Price);
+        dest.writeString(CategoryID);
+
     }
 }
