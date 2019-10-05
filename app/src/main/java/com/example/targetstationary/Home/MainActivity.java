@@ -53,8 +53,11 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference eventRef;
 
     /*For UsefulInfo data*/
-    DatabaseReference preschool;
+    DatabaseReference preschool, collegeuni, primaryschool, secondaryschool;
     public static ArrayList<ProductModel> productsPreschool = new ArrayList<ProductModel>();
+    public static ArrayList<ProductModel> productsPrimary = new ArrayList<ProductModel>();
+    public static ArrayList<ProductModel> productsSecondary = new ArrayList<ProductModel>();
+    public static ArrayList<ProductModel> productsCollege = new ArrayList<ProductModel>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         eventRef = database.getReference("Events");
         preschool = database.getReference().child("UsefulInfo").child("PreSchool");
+        collegeuni = database.getReference().child("UsefulInfo").child("CollegeUni");
+        primaryschool = database.getReference().child("UsefulInfo").child("PrimarySchool");
+        secondaryschool = database.getReference().child("UsefulInfo").child("SecondarySchool");
 
         /*Init imageviews*/
         primaryschoolImage = (ImageView) findViewById(R.id.primaryschoolImage);
@@ -74,14 +80,52 @@ public class MainActivity extends AppCompatActivity {
         preschoolImage = (ImageView) findViewById(R.id.preSchoolImage);
         scecondaryschoolImage = (ImageView) findViewById(R.id.secondaryschoolImage);
 
+        /*LOAD DATA*/
         loadProducts(preschool, productsPreschool);
+        loadProducts(primaryschool, productsPrimary);
+        loadProducts(secondaryschool, productsSecondary);
+        loadProducts(collegeuni, productsCollege);
+
+        /*IMGAGE CLICK LISTENER*/
+        preschoolImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Goes into PreSchool*/
+                Intent Preschool = new Intent(MainActivity.this, PreSchool.class);
+                Preschool.putParcelableArrayListExtra("List", productsPreschool);
+
+                startActivity(Preschool);
+            }
+        });
 
         primaryschoolImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /*Goes into PreSchool*/
                 Intent Preschool = new Intent(MainActivity.this, PreSchool.class);
-                Preschool.putParcelableArrayListExtra("List", productsPreschool);
+                Preschool.putParcelableArrayListExtra("List", productsPrimary);
+
+                startActivity(Preschool);
+            }
+        });
+
+        scecondaryschoolImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Goes into PreSchool*/
+                Intent Preschool = new Intent(MainActivity.this, PreSchool.class);
+                Preschool.putParcelableArrayListExtra("List", productsSecondary);
+
+                startActivity(Preschool);
+            }
+        });
+
+        collegeuniImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*Goes into PreSchool*/
+                Intent Preschool = new Intent(MainActivity.this, PreSchool.class);
+                Preschool.putParcelableArrayListExtra("List", productsCollege);
 
                 startActivity(Preschool);
             }
