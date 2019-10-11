@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<ProductModel> productsSecondary = new ArrayList<ProductModel>();
     public static ArrayList<ProductModel> productsCollege = new ArrayList<ProductModel>();
 
+    /*Commenting from Roderick's  PC*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
