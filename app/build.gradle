@@ -32,6 +32,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.4'
     implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
 
+    /*For search*/
+    implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
+
     /*for Cart*/
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'

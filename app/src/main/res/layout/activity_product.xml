@@ -16,7 +16,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/relativeLayout3">
 
-            <include layout="@layout/layout_top_tabs"/>
+           <!-- <include layout="@layout/layout_top_tabs"/>-->
+            <com.mancj.materialsearchbar.MaterialSearchBar
+                style="@style/MaterialSearchBarLight"
+                android:layout_alignParentTop="true"
+                app:mt_speechMode="false"
+                app:mt_hint="Custom hint"
+                app:mt_maxSuggestionsCount="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/searchBar" />
 
         </RelativeLayout>
 
