@@ -49,6 +49,18 @@
             android:id="@+id/cart_item_count"
             android:background="@color/colorPrimary"/>
 
+        <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
+            android:layout_height="30dp"
+            android:layout_width="100dp"
+            android:id="@+id/cart_quantity"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="18dp"
+            android:textSize="14sp"
+            app:background="@color/cardview_shadow_start_color"
+            app:initialNumber="1"
+            app:finalNumber="30"
+            />
     </LinearLayout>
 
 

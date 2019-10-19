@@ -64,4 +64,10 @@ public class Database extends SQLiteAssetHelper {
         db.execSQL(query);
     }
 
+    public void updatecart(OrderModel orderModel) {
+        SQLiteDatabase db = getReadableDatabase();
+        String query = String.format("UPDATE OrderDetails SET Quantity = %s where ProductID = %s", orderModel.getQuantity(), orderModel.getProductID());
+        db.execSQL(query);
+
+    }
 }

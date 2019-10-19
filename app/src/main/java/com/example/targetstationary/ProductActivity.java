@@ -247,7 +247,6 @@ public class ProductActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapterProduct.stopListening();
-        searchAdapter.stopListening();
     }
 
     /*BottomNavigationView Setup*/
