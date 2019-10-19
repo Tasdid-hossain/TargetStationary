@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">TargetStationary</string>
+    <string name="facebook_application_id">396811037934294</string>
+    <string name="fb_login_protocol_scheme">fb396811037934294</string>
+
 </resources>

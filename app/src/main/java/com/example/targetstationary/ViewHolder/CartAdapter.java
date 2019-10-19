@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView;
 class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener{
 
     TextView txt_cart_name, txt_price;
-    ImageView img_cart_count;
     ElegantNumberButton cart_quantity;
 
     private ItemClickListener itemClickListener;
@@ -45,7 +44,6 @@ class CartViewHolder extends RecyclerView.ViewHolder implements View.OnClickList
         super(itemView);
         txt_cart_name = (TextView) itemView.findViewById(R.id.cart_item_name);
         txt_price = (TextView) itemView.findViewById(R.id.cart_item_price);
-        img_cart_count = (ImageView) itemView.findViewById(R.id.cart_item_count);
         cart_quantity = (ElegantNumberButton) itemView.findViewById(R.id.cart_quantity);
 
         itemView.setOnCreateContextMenuListener(this);
@@ -87,8 +85,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
-        TextDrawable textDrawable = TextDrawable.builder().buildRound(""+listData.get(position).getQuantity(), Color.RED);
-        holder.img_cart_count.setImageDrawable(textDrawable);
 
         Locale locale = new Locale("en", "us");
         NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);

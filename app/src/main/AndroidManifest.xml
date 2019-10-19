@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.targetstationary">
-    <!-- if you want to load images from the internet -->
+    <!-- if you want to load images from a file OR from the internet -->
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Category.PreSchool"></activity>
+        <activity android:name=".Account.SignIn"></activity>
+        <activity android:name=".Category.PreSchool" />
         <activity android:name=".ProductDetails" />
         <activity android:name=".ProductActivity" />
         <activity android:name=".Category.CategoryActivity" />
@@ -23,9 +27,11 @@
         <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Cart.CartActivity" />
         <activity android:name=".Account.AccountActivity" />
-    </application> <!-- if you want to load images from a file OR from the internet -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+
+    </application>
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
