@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.MenuItem;
 
 import com.example.targetstationary.Account.AccountActivity;
+import com.example.targetstationary.Account.SignIn;
 import com.example.targetstationary.Cart.CartActivity;
 import com.example.targetstationary.Category.CategoryActivity;
 import com.example.targetstationary.Home.MainActivity;
@@ -40,7 +41,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent4);
                         break;
                     case R.id.ic_account:
-                        Intent intent5 = new Intent(context, AccountActivity.class); //ACTIVITY_NUM = 4
+                        Intent intent5 = new Intent(context, SignIn.class); //ACTIVITY_NUM = 4
                         context.startActivity(intent5);
                         break;
 
