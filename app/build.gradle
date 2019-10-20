@@ -2,10 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    buildToolsVersion '23.0.1'
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.targetstationary"
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -26,12 +27,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'com.android.support:support-compat:28.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.android.support:design:28.1.1'
     implementation 'com.firebaseui:firebase-ui-database:6.0.2'
     implementation 'com.google.firebase:firebase-database:19.1.0'
     implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
-
     /*For search*/
     implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
 

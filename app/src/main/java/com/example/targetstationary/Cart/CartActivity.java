@@ -4,14 +4,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.targetstationary.Account.SignIn;
 import com.example.targetstationary.Model.OrderModel;
+import com.example.targetstationary.Model.Request;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.CartAdapter;
 import com.example.targetstationary.database.Database;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -32,11 +39,15 @@ public class CartActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
 
     FirebaseDatabase database;
-    DatabaseReference request;
+    DatabaseReference requests;
 
     public TextView totalPrice;
     List <OrderModel> cart = new ArrayList<>();
     CartAdapter adapter;
+    FloatingActionButton place_order;
+
+    private FirebaseAuth mAuth;
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,14 +57,37 @@ public class CartActivity extends AppCompatActivity {
         setupBottomNavigationView();
 
         database = FirebaseDatabase.getInstance();
-        request = database.getReference("Requests");
+        requests = database.getReference("Orders");
 
         recyclerViewCart = (RecyclerView) findViewById(R.id.cartRecycler);
         recyclerViewCart.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerViewCart.setLayoutManager(layoutManager);
-
         totalPrice = (TextView) findViewById(R.id.total);
+
+        mAuth = FirebaseAuth.getInstance();
+        place_order= (FloatingActionButton) findViewById(R.id.place_order);
+        place_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentUser==null)
+                    Toast.makeText(CartActivity.this, "Please login to place the order", Toast.LENGTH_SHORT).show();
+                else
+                {
+                    Request request = new Request(
+                            currentUser.getPhoneNumber(),
+                            totalPrice.getText().toString(),
+                            currentUser.getDisplayName(),
+                            cart
+                    );
+                    Toast.makeText(CartActivity.this, "Your order has been placed!", Toast.LENGTH_SHORT).show();
+                    requests.child(currentUser.getUid()).child(String.valueOf(System.currentTimeMillis())).setValue(request);
+                    new Database(getBaseContext()).cleanCart();
+                    finish();
+                }
+
+            }
+        });
 
         loadListProduct();
     }
@@ -100,4 +134,15 @@ public class CartActivity extends AppCompatActivity {
         }
         loadListProduct();
     }
+
+    /*Check auth status*/
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        currentUser = mAuth.getCurrentUser();
+
+
+    }
+
 }
