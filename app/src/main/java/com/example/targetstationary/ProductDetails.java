@@ -47,8 +47,6 @@ public class ProductDetails extends AppCompatActivity {
 
 //    private ImageView singleProduct_image;!!!!!!!!!!!!!!!!!!!!!!
 
-    ImageView imageView1, imageView2,imageView3,imageView4;
-    public HashMap<String, String> file_maps ;
 
     String ProductID = "";
 
