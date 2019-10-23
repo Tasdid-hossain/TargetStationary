@@ -55,6 +55,7 @@ public class UpdateAccount extends AppCompatActivity {
                 saveData();
                 Intent i = new Intent(UpdateAccount.this, SignIn.class);
                 startActivity(i);
+                finish();
             }
         });
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +63,7 @@ public class UpdateAccount extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(UpdateAccount.this, SignIn.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -87,15 +89,15 @@ public class UpdateAccount extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
                 if(userModel!=null){
-                    edit_address.setText(userModel.getAddress());
-                }
-                else
-                    edit_address.setText("Please enter address");
-
-                if(userModel!=null)
                     edit_payment.setText(userModel.getPayment());
-                else
+                    edit_address.setText(userModel.getAddress());
+                    edit_phone.setText(userModel.getPhone());
+                }
+                else{
                     edit_payment.setText("Please enter payment method");
+                    edit_address.setText("Please enter address");
+                }
+
             }
 
             @Override

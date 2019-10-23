@@ -8,6 +8,6 @@
     <color name="grey">#bfbfbf</color>
     <color name="white">#ffffff</color>
     <color name="primaryDark">#292b3d</color>
-    <color name="startblue">#08c6df</color>
-    <color name="endblue">#0bcce6</color>
+    <color name="startblue">#673AB7</color>
+    <color name="endblue">#512DA8</color>
 </resources>

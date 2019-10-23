@@ -24,6 +24,7 @@ import com.example.targetstationary.Model.ProductModel;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.CategoryViewHolder;
 import com.example.targetstationary.ViewHolder.ProductViewHolder;
+import com.example.targetstationary.database.Database;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -33,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.squareup.picasso.Picasso;
 
@@ -46,6 +48,7 @@ public class ProductActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference product;
     Query productQuery;
+    MaterialSpinner spinnerProduct;
 
     String CategoryID;
 
@@ -58,6 +61,7 @@ public class ProductActivity extends AppCompatActivity {
     FirebaseRecyclerAdapter<ProductModel, ProductViewHolder> searchAdapter;
     List<String> suggestList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
+    Database localDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,12 @@ public class ProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product);
         Log.d(TAG, "onCreate: Started");
         setupBottomNavigationView();
+
+        spinnerProduct= (MaterialSpinner) findViewById(R.id.spinnerProducts);
+        spinnerProduct.setItems("By Price");
+
+        localDB = new Database(this);
+
 
         /*Init Firebase*/
         database = FirebaseDatabase.getInstance();
@@ -76,6 +86,7 @@ public class ProductActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recycler_product.setHasFixedSize(true);
         recycler_product.setLayoutManager(new GridLayoutManager(this,2));
+        recycler_product.setNestedScrollingEnabled(false);
 
         /*Get the intent data which is sent from CategoryActivit*/
         if(getIntent() != null)
@@ -138,6 +149,8 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private void startSearch(CharSequence text) {
         /*This is basically a query that will be included when creating the search adapter*/
@@ -211,6 +224,24 @@ public class ProductActivity extends AppCompatActivity {
                 holder.textProductName.setText(model.getName());
                 Picasso.get().load(model.getImage()).into(holder.imageViewProduct);
                 holder.textProductPrice.setText(model.getPrice());
+                if(localDB.isfavorites(adapterProduct.getRef(position).getKey()))
+                    holder.favorite_image.setImageResource(R.drawable.ic_favorite_black_24dp);
+
+                holder.favorite_image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!localDB.isfavorites(adapterProduct.getRef(position).getKey()))
+                        {
+                            localDB.addtofavorites(adapterProduct.getRef(position).getKey());
+                            holder.favorite_image.setImageResource(R.drawable.ic_favorite_black_24dp);
+                        }
+                        else{
+                            localDB.deletefromfavorites(adapterProduct.getRef(position).getKey());
+                            holder.favorite_image.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                        }
+
+                    }
+                });
 
                 final ProductModel clickItem = model;
                 holder.setItemClickListener(new ItemClickListener() {
