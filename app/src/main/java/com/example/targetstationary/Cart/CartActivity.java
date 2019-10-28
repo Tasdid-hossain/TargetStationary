@@ -23,7 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,7 +44,7 @@ public class CartActivity extends AppCompatActivity {
     DatabaseReference requests;
 
     public TextView totalPrice;
-    List <OrderModel> cart = new ArrayList<>();
+    ArrayList <OrderModel> cart = new ArrayList<>();
     CartAdapter adapter;
     FloatingActionButton place_order;
 
@@ -78,10 +80,12 @@ public class CartActivity extends AppCompatActivity {
                             currentUser.getPhoneNumber(),
                             totalPrice.getText().toString(),
                             currentUser.getDisplayName(),
+                            "Order Received",
                             cart
                     );
                     Toast.makeText(CartActivity.this, "Your order has been placed!", Toast.LENGTH_SHORT).show();
-                    requests.child(currentUser.getUid()).child(String.valueOf(System.currentTimeMillis())).setValue(request);
+
+                    requests.child(currentUser.getUid()).child(String.valueOf(Calendar.getInstance().getTime())).setValue(request);
                     new Database(getBaseContext()).cleanCart();
                     finish();
                 }

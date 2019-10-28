@@ -1,6 +1,9 @@
 package com.example.targetstationary.Model;
 
-public class OrderModel {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class OrderModel implements Parcelable {
     String ProductID;
     String ProductName;
     String Quantity;
@@ -17,6 +20,26 @@ public class OrderModel {
         Price = price;
         Discount = discount;
     }
+
+    protected OrderModel(Parcel in) {
+        ProductID = in.readString();
+        ProductName = in.readString();
+        Quantity = in.readString();
+        Price = in.readString();
+        Discount = in.readString();
+    }
+
+    public static final Creator<OrderModel> CREATOR = new Creator<OrderModel>() {
+        @Override
+        public OrderModel createFromParcel(Parcel in) {
+            return new OrderModel(in);
+        }
+
+        @Override
+        public OrderModel[] newArray(int size) {
+            return new OrderModel[size];
+        }
+    };
 
     public String getProductID() {
         return ProductID;
@@ -56,5 +79,19 @@ public class OrderModel {
 
     public void setDiscount(String discount) {
         Discount = discount;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(ProductID);
+        dest.writeString(ProductName);
+        dest.writeString(Quantity);
+        dest.writeString(Price);
+        dest.writeString(Discount);
     }
 }

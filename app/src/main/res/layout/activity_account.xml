@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Category.CategoryActivity">
+    tools:context=".Account.AccountActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/relativeLayout14">
+            android:id="@+id/relativeLayout10">
 
             <include layout="@layout/layout_top_tabs"/>
 
@@ -24,11 +24,26 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/relativeLayout2"
-            android:layout_below="@+id/relativeLayout14">
+            android:id="@+id/relativeLayout11"
+            android:layout_below="@+id/relativeLayout10"
+            android:padding="20dp">
 
-            <include layout="@layout/content_categories"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SingUp"
+                android:id="@+id/signup"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"/>
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:layout_below="@id/signup"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:id="@+id/login"/>
         </RelativeLayout>
 
         <!-- Bottom navigation -->

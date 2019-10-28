@@ -18,7 +18,7 @@ public class Database extends SQLiteAssetHelper {
         super(context, DB_NAME, null, DB_VER);
     }
 
-    public List <OrderModel> getCarts(){
+    public ArrayList <OrderModel> getCarts(){
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
@@ -28,7 +28,7 @@ public class Database extends SQLiteAssetHelper {
         qb.setTables(sqlTable);
         Cursor c = qb.query(db, sqlSelect, null,null,null,null,null);
 
-        final List<OrderModel> result = new ArrayList<>();
+        final ArrayList<OrderModel> result = new ArrayList<>();
         if(c.moveToFirst()){
             do {
                 result.add(new OrderModel(c.getString(c.getColumnIndex("ProductID")),

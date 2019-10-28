@@ -9,6 +9,7 @@ import com.example.targetstationary.Account.SignIn;
 import com.example.targetstationary.Cart.CartActivity;
 import com.example.targetstationary.Category.CategoryActivity;
 import com.example.targetstationary.Home.MainActivity;
+import com.example.targetstationary.OrderActivity;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Search.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -37,7 +38,7 @@ public class BottomNavigationViewHelper {
                         context.startActivity(intent3);
                         break;
                     case R.id.ic_cart:
-                        Intent intent4 = new Intent(context, CartActivity.class); //ACTIVITY_NUM = 3
+                        Intent intent4 = new Intent(context, OrderActivity.class); //ACTIVITY_NUM = 3
                         context.startActivity(intent4);
                         break;
                     case R.id.ic_account:

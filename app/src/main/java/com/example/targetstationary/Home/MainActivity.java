@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import me.relex.circleindicator.CircleIndicator;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.targetstationary.Cart.CartActivity;
 import com.example.targetstationary.Category.PreSchool;
 import com.example.targetstationary.Model.ImageListModel;
 import com.example.targetstationary.Model.ProductModel;
@@ -67,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: Starting");
         setupBottomNavigationView();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tabs);
+        setSupportActionBar(toolbar);
+
 
         /*Firebase init*/
         database = FirebaseDatabase.getInstance();
@@ -136,6 +141,25 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pagerMain);
         getDetailEvent();
         
+    }
+
+    /*Toolbar*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toptoolmenu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.ic_cartTop){
+            Intent i = new Intent(MainActivity.this, CartActivity.class);
+            startActivity(i);
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
     }
 
     /*Load events*/

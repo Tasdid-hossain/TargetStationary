@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Category.CategoryActivity">
+    tools:context=".OrderActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -27,7 +27,11 @@
             android:id="@+id/relativeLayout2"
             android:layout_below="@+id/relativeLayout14">
 
-            <include layout="@layout/content_categories"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recycler_orders"
+                android:scrollbars="vertical"/>
 
         </RelativeLayout>
 
