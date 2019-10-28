@@ -6,8 +6,27 @@
     android:layout_height="match_parent"
     tools:context=".OrderDetailsActivity">
 
+    <!-- top toolbar -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout114">
+
+        <include layout="@layout/layout_top_tabs"/>
+
+    </RelativeLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/relativeLayout114"
+        android:id="@+id/deliveryAnim"
+        app:lottie_loop="true"
+        app:lottie_fileName="29-motorcycle.json"
+        app:lottie_autoPlay="true"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/deliveryAnim"
         android:id="@+id/recycler_details"/>
 </RelativeLayout>

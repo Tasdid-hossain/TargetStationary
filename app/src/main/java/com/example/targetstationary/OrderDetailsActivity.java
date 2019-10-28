@@ -1,6 +1,7 @@
 package com.example.targetstationary;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,10 +20,16 @@ public class OrderDetailsActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
     ArrayList<OrderModel> orders;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tabs);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+
 
         Bundle bundle = getIntent().getExtras();
         orders = bundle.getParcelableArrayList("mylist");
@@ -40,5 +47,10 @@ public class OrderDetailsActivity extends AppCompatActivity {
         orderDetailsAdapter.notifyDataSetChanged();
 
         recyclerView_orderDetails.setAdapter(orderDetailsAdapter);
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

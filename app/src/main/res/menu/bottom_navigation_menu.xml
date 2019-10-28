@@ -18,7 +18,7 @@
 
     <item
         android:id="@+id/ic_cart"
-        android:icon="@drawable/ic_cart"
+        android:icon="@drawable/ic_reorder_black_24dp"
         android:title=""></item>
 
     <item

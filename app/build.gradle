@@ -35,7 +35,8 @@ dependencies {
     implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
     /*For search*/
     implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
-
+    /*For image steps in order*/
+    implementation 'com.airbnb.android:lottie:3.1.0'
     /*for Cart*/
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
