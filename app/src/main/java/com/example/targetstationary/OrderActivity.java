@@ -55,23 +55,30 @@ public class OrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order);
         Log.d(TAG, "onCreate: Started");
 
-        /*Init Firebase*/
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-        database = FirebaseDatabase.getInstance();
-        Orders = database.getReference().child("Orders").child(currentUser.getUid());
-        orderyQuery = Orders.orderByKey();
+
+        if(currentUser==null){
+
+            Toast.makeText(this,"Log in to view orders", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            /*Init Firebase*/
+            mAuth = FirebaseAuth.getInstance();
+            currentUser = mAuth.getCurrentUser();
+            database = FirebaseDatabase.getInstance();
+            Orders = database.getReference().child("Orders").child(currentUser.getUid());
+            orderyQuery = Orders.orderByKey();
+
+            /*Load category*/
+            recycler_orders = (RecyclerView) findViewById(R.id.recycler_orders);
+            layoutManager = new LinearLayoutManager(this);
+            recycler_orders.setHasFixedSize(true);
+            recycler_orders.setLayoutManager(new LinearLayoutManager(this));
+            loadOrders();
+            recycler_orders.setAdapter(adapter);
+        }
 
 
-        /*Load category*/
-        recycler_orders = (RecyclerView) findViewById(R.id.recycler_orders);
-        layoutManager = new LinearLayoutManager(this);
-        recycler_orders.setHasFixedSize(true);
-        recycler_orders.setLayoutManager(new LinearLayoutManager(this));
 
-        loadOrders();
-
-        recycler_orders.setAdapter(adapter);
 
     }
 
@@ -128,14 +135,15 @@ public class OrderActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        adapter.startListening();
+        if(currentUser!=null)
+            adapter.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        adapter.stopListening();
+        if(currentUser!=null)
+            adapter.stopListening();
     }
 
 
