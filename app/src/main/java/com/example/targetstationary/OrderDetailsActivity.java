@@ -19,7 +19,8 @@ public class OrderDetailsActivity extends AppCompatActivity {
     RecyclerView recyclerView_orderDetails;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<OrderModel> orders;
-
+    String status;
+    TextView order_status_details;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +30,19 @@ public class OrderDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setTitle("Order Details");
 
 
         Bundle bundle = getIntent().getExtras();
         orders = bundle.getParcelableArrayList("mylist");
+        status = bundle.getString("status");
 
         recyclerView_orderDetails = (RecyclerView) findViewById(R.id.recycler_details);
         recyclerView_orderDetails.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView_orderDetails.setLayoutManager(layoutManager);
+        order_status_details = (TextView) findViewById(R.id.order_details_status);
+        order_status_details.setText(status);
 
         loadOrderDetails();
     }

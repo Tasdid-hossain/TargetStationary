@@ -24,9 +24,21 @@
         app:lottie_fileName="29-motorcycle.json"
         app:lottie_autoPlay="true"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order Received"
+        android:layout_below="@+id/deliveryAnim"
+        android:id="@+id/order_details_status"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:textSize="20sp"
+        android:textColor="@color/com_facebook_blue"
+        android:textStyle="bold"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/deliveryAnim"
+        android:layout_below="@id/order_details_status"
         android:id="@+id/recycler_details"/>
 </RelativeLayout>

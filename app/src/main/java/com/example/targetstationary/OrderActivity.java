@@ -54,7 +54,8 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
         Log.d(TAG, "onCreate: Started");
-
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
         if(currentUser==null){
 
@@ -62,8 +63,6 @@ public class OrderActivity extends AppCompatActivity {
         }
         else{
             /*Init Firebase*/
-            mAuth = FirebaseAuth.getInstance();
-            currentUser = mAuth.getCurrentUser();
             database = FirebaseDatabase.getInstance();
             Orders = database.getReference().child("Orders").child(currentUser.getUid());
             orderyQuery = Orders.orderByKey();
@@ -115,6 +114,7 @@ public class OrderActivity extends AppCompatActivity {
                         Intent i = new Intent(OrderActivity.this, OrderDetailsActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putParcelableArrayList("mylist",orderModels);
+                        bundle.putString("status",model.getStatus());
                         i.putExtras(bundle);
                         startActivity(i);
                         Toast.makeText(OrderActivity.this, "Clicked", Toast.LENGTH_SHORT).show();

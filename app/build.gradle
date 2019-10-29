@@ -37,6 +37,8 @@ dependencies {
     implementation 'com.github.mancj:MaterialSearchBar:0.8.2'
     /*For image steps in order*/
     implementation 'com.airbnb.android:lottie:3.1.0'
+    /*staggeredGrid*/
+    implementation 'com.etsy.android.grid:library:1.0.5'
     /*for Cart*/
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'

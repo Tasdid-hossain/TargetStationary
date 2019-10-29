@@ -2,6 +2,8 @@ package com.example.targetstationary.Home;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 import me.relex.circleindicator.CircleIndicator;
 import androidx.appcompat.widget.Toolbar;
@@ -10,13 +12,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.etsy.android.grid.StaggeredGridView;
 import com.example.targetstationary.Cart.CartActivity;
 import com.example.targetstationary.Category.PreSchool;
+import com.example.targetstationary.Interface.ItemClickListener;
 import com.example.targetstationary.Model.ImageListModel;
 import com.example.targetstationary.Model.ProductModel;
 import com.example.targetstationary.ProductActivity;
@@ -24,12 +31,18 @@ import com.example.targetstationary.ProductDetails;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.MyPager;
+import com.example.targetstationary.ViewHolder.ProductViewHolder;
+import com.example.targetstationary.database.Database;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     private static int currentPage = 0;
     private static int NUM_PAGES = 4;
     private ImageView preschoolImage, collegeuniImage, scecondaryschoolImage, primaryschoolImage;
+    FirebaseRecyclerAdapter<ProductModel, ProductViewHolder> adapterProduct;
+    Query productQuery;
 
     /*VIEWPAGER*/
     private ViewPager viewPager;
@@ -53,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     /*For event data*/
     FirebaseDatabase database;
     DatabaseReference eventRef;
+    DatabaseReference product;
+    RecyclerView gridView;
 
     /*For UsefulInfo data*/
     DatabaseReference preschool, collegeuni, primaryschool, secondaryschool;
@@ -62,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<ProductModel> productsCollege = new ArrayList<ProductModel>();
 
     /*Commenting from Roderick's  PC*/
+    Database localDB;
+    private StaggeredGridLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         setupBottomNavigationView();
         Toolbar toolbar = (Toolbar) findViewById(R.id.tabs);
         setSupportActionBar(toolbar);
-
+        localDB = new Database(this);
 
         /*Firebase init*/
         database = FirebaseDatabase.getInstance();
@@ -80,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
         collegeuni = database.getReference().child("UsefulInfo").child("CollegeUni");
         primaryschool = database.getReference().child("UsefulInfo").child("PrimarySchool");
         secondaryschool = database.getReference().child("UsefulInfo").child("SecondarySchool");
+        product = database.getReference().child("Product");
+        productQuery = product;
 
         /*Init imageviews*/
         primaryschoolImage = (ImageView) findViewById(R.id.primaryschoolImage);
@@ -140,7 +161,84 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.view_pagerMain);
         getDetailEvent();
-        
+
+        gridView = (RecyclerView) findViewById(R.id.stagger_main);
+        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        loadProductGrid();
+        gridView.setLayoutManager(mLayoutManager);
+        gridView.setAdapter(adapterProduct);
+
+    }
+
+    private void loadProductGrid() {
+        /*This is basically a query that will be included when creating the adapter. Matches the categoryID with the */
+        FirebaseRecyclerOptions productOptions = new FirebaseRecyclerOptions.Builder<ProductModel>().setQuery(productQuery.limitToFirst(6),
+                ProductModel.class).build();
+
+        /*The firebase recycler adapter. which takes the products depending on the category from the firebase.
+         * It creates a recycler view and shows*/
+        adapterProduct = new FirebaseRecyclerAdapter<ProductModel, ProductViewHolder>(productOptions) {
+
+
+            @Override
+            protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull ProductModel model) {
+                holder.textProductName.setText(model.getName());
+                Picasso.get().load(model.getImage()).into(holder.imageViewProduct);
+                holder.textProductPrice.setText(model.getPrice());
+                if(localDB.isfavorites(adapterProduct.getRef(position).getKey()))
+                    holder.favorite_image.setImageResource(R.drawable.ic_favorite_black_24dp);
+
+                holder.favorite_image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!localDB.isfavorites(adapterProduct.getRef(position).getKey()))
+                        {
+                            localDB.addtofavorites(adapterProduct.getRef(position).getKey());
+                            holder.favorite_image.setImageResource(R.drawable.ic_favorite_black_24dp);
+                        }
+                        else{
+                            localDB.deletefromfavorites(adapterProduct.getRef(position).getKey());
+                            holder.favorite_image.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                        }
+
+                    }
+                });
+
+                final ProductModel clickItem = model;
+                holder.setItemClickListener(new ItemClickListener() {
+                    @Override
+                    public void onClick(View view, int position, boolean isLongClick) {
+                        Toast.makeText(MainActivity.this, ""+clickItem.getName(), Toast.LENGTH_SHORT).show();
+
+                        /*Goes into Product Details*/
+                        Intent prodDetails = new Intent(MainActivity.this, ProductDetails.class);
+                        prodDetails.putExtra("ProductID", adapterProduct.getRef(position).getKey());
+                        startActivity(prodDetails);
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_item, parent, false);
+                return new ProductViewHolder(view);
+            }
+        };
+    }
+
+    /*Must include onstart and onstop for firebaserecycleradapter*/
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapterProduct.startListening();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapterProduct.stopListening();
     }
 
     /*Toolbar*/

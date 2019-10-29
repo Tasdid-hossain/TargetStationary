@@ -19,13 +19,17 @@
             <include layout="@layout/layout_top_tabs"/>
 
         </RelativeLayout>
-
+        <ScrollView android:id="@+id/scrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_marginBottom="70dp">
         <!-- Middle section (body) -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/relativeLayout2"
-            android:layout_below="@+id/relativeLayout1">
+            >
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/view_pagerMain"
@@ -102,8 +106,16 @@
                 android:layout_toRightOf="@id/primaryschoolImage"
                 android:src="@drawable/collegeuni"/>
 
-        </RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/collegeuniImage"
+                android:id="@+id/stagger_main"
+                app:item_margin="8dp"
+                app:column_count="2"/>
 
+        </RelativeLayout>
+        </ScrollView>
         <!-- Bottom navigation -->
         <include layout="@layout/layout_bottom_navigation_view"/>
 
