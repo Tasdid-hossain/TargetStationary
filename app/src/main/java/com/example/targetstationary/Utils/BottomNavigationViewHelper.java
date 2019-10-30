@@ -37,7 +37,7 @@ public class BottomNavigationViewHelper {
                         Intent intent3 = new Intent(context, SearchActivity.class); //ACTIVITY_NUM = 2
                         context.startActivity(intent3);
                         break;
-                    case R.id.ic_cart:
+                    case R.id.ic_order:
                         Intent intent4 = new Intent(context, OrderActivity.class); //ACTIVITY_NUM = 3
                         context.startActivity(intent4);
                         break;
@@ -45,7 +45,6 @@ public class BottomNavigationViewHelper {
                         Intent intent5 = new Intent(context, SignIn.class); //ACTIVITY_NUM = 4
                         context.startActivity(intent5);
                         break;
-
                 }
 
                 return false;

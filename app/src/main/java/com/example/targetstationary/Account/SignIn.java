@@ -122,7 +122,8 @@ public class SignIn extends AppCompatActivity {
                 AuthUI.getInstance().createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .setTheme(R.style.LoginTheme)
-                        .setLogo(R.drawable.targetlogo)
+                        .setLogo(R.drawable.targetlogo).setTosAndPrivacyPolicyUrls("https://target.com.my/terms-and-conditions.php"
+                ,"https://target.com.my/privacy-policy.php")
                 .build(),MY_REQUEST_CODE
         );
     }

@@ -4,19 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.targetstationary.Category.CategoryActivity;
+import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.Interface.ItemClickListener;
 import com.example.targetstationary.Model.CategoryModel;
 import com.example.targetstationary.Model.OrderModel;
 import com.example.targetstationary.Model.Request;
+import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.CategoryViewHolder;
 import com.example.targetstationary.ViewHolder.OrderViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +43,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OrderActivity extends AppCompatActivity {
     private static final String TAG = "OrderActivity";
-
+    private static final int ACTIVITY_NUM =3;
     FirebaseDatabase database;
     DatabaseReference Orders;
     Query orderyQuery;
@@ -56,6 +61,7 @@ public class OrderActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: Started");
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        setupBottomNavigationView();
 
         if(currentUser==null){
 
@@ -75,9 +81,6 @@ public class OrderActivity extends AppCompatActivity {
             loadOrders();
             recycler_orders.setAdapter(adapter);
         }
-
-
-
 
     }
 
@@ -99,8 +102,6 @@ public class OrderActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-                SimpleDateFormat format = new SimpleDateFormat("MMM dd,yyyy hh:mm a");
                 holder.order_items.setText(String.valueOf(orderModels.size()));
 
                 holder.orderPrice.setText(model.getTotal());
@@ -146,6 +147,14 @@ public class OrderActivity extends AppCompatActivity {
             adapter.stopListening();
     }
 
-
+    /*BottomNavigationView Setup*/
+    private void setupBottomNavigationView(){
+        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewHelper.enableNavigation(OrderActivity.this,bottomNavigationView);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(3);
+        menuItem.setChecked(true);
+    }
 
 }

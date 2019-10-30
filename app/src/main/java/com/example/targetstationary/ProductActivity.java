@@ -48,7 +48,6 @@ public class ProductActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference product;
     Query productQuery;
-    MaterialSpinner spinnerProduct;
 
     String CategoryID;
 
@@ -69,10 +68,6 @@ public class ProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product);
         Log.d(TAG, "onCreate: Started");
         setupBottomNavigationView();
-
-        spinnerProduct= (MaterialSpinner) findViewById(R.id.spinnerProducts);
-        spinnerProduct.setItems("By Price");
-
         localDB = new Database(this);
 
 
@@ -95,8 +90,9 @@ public class ProductActivity extends AppCompatActivity {
         {
             loadProduct(CategoryID);
         }
-
+        adapterProduct.startListening();
         recycler_product.setAdapter(adapterProduct);
+
 
         /*Search functions*/
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
@@ -148,6 +144,7 @@ public class ProductActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
 
@@ -242,7 +239,6 @@ public class ProductActivity extends AppCompatActivity {
 
                     }
                 });
-
                 final ProductModel clickItem = model;
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
@@ -286,6 +282,7 @@ public class ProductActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.enableNavigation(ProductActivity.this,bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
-
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
     }
 }
