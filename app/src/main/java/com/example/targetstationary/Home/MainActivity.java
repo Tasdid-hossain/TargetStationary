@@ -26,7 +26,7 @@ import com.example.targetstationary.Category.PreSchool;
 import com.example.targetstationary.Interface.ItemClickListener;
 import com.example.targetstationary.Model.ImageListModel;
 import com.example.targetstationary.Model.ProductModel;
-import com.example.targetstationary.ProductActivity;
+import com.example.targetstationary.ProductListActivity;
 import com.example.targetstationary.ProductDetails;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;

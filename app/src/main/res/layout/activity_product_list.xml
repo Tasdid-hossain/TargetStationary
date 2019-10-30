@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProductActivity">
+    tools:context=".ProductListActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/relativeLayout3">
 
-           <!-- <include layout="@layout/layout_top_tabs"/>-->
+            <!-- <include layout="@layout/layout_top_tabs"/>-->
             <com.mancj.materialsearchbar.MaterialSearchBar
                 style="@style/MaterialSearchBarLight"
                 android:layout_alignParentTop="true"
@@ -30,13 +30,7 @@
         </RelativeLayout>
 
         <!-- Middle section (body) -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="80dp">
 
-        </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -48,8 +42,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recycler_product"
+                android:id="@+id/prod_recycler"
                 android:scrollbars="vertical"
+                app:column_count="2"
                 android:layout_marginBottom="70dp">
 
             </androidx.recyclerview.widget.RecyclerView>
@@ -61,4 +56,4 @@
 
     </RelativeLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

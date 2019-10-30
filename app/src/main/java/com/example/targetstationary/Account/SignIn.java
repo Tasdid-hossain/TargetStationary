@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.targetstationary.Category.CategoryActivity;
 import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.Model.UserModel;
-import com.example.targetstationary.ProductActivity;
+import com.example.targetstationary.ProductListActivity;
 import com.example.targetstationary.ProductDetails;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.facebook.FacebookSdk;

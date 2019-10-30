@@ -19,7 +19,8 @@ import android.widget.Toast;
 
 import com.example.targetstationary.Interface.ItemClickListener;
 import com.example.targetstationary.Model.CategoryModel;
-import com.example.targetstationary.ProductActivity;
+import com.example.targetstationary.ProductListActivity;
+import com.example.targetstationary.ProductListActivity;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.CategoryViewHolder;
@@ -82,7 +83,7 @@ public class CategoryActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
                         /*Get CategoryID and send to ProductActivity*/
-                        Intent productIntent = new Intent(CategoryActivity.this, ProductActivity.class);
+                        Intent productIntent = new Intent(CategoryActivity.this, ProductListActivity.class);
                         productIntent.putExtra("CategoryID", adapter.getRef(position).getKey().toString());
                         Toast.makeText(CategoryActivity.this, ""+adapter.getRef(position).getKey(), Toast.LENGTH_SHORT).show();
 

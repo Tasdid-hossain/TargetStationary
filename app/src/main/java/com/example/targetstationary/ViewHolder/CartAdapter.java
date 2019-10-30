@@ -17,7 +17,7 @@ import com.example.targetstationary.Cart.CartActivity;
 import com.example.targetstationary.Category.CategoryActivity;
 import com.example.targetstationary.Interface.ItemClickListener;
 import com.example.targetstationary.Model.OrderModel;
-import com.example.targetstationary.ProductActivity;
+import com.example.targetstationary.ProductListActivity;
 import com.example.targetstationary.R;
 import com.example.targetstationary.database.Database;
 

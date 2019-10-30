@@ -3,8 +3,8 @@ package com.example.targetstationary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,11 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.Interface.ItemClickListener;
-import com.example.targetstationary.Model.CategoryModel;
 import com.example.targetstationary.Model.ProductModel;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
-import com.example.targetstationary.ViewHolder.CategoryViewHolder;
 import com.example.targetstationary.ViewHolder.ProductViewHolder;
 import com.example.targetstationary.database.Database;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -34,65 +33,52 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductActivity extends AppCompatActivity {
-
-    private static final String TAG = "ProductActivity";
+public class ProductListActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
-    DatabaseReference product;
+    DatabaseReference productRef;
+    FirebaseRecyclerAdapter<ProductModel, ProductViewHolder> adapter;
     Query productQuery;
-
-    String CategoryID;
-
-
-    RecyclerView recycler_product;
-    RecyclerView.LayoutManager layoutManager;
-    FirebaseRecyclerAdapter<ProductModel, ProductViewHolder> adapterProduct;
+    RecyclerView prod_recycler;
+    String CategoryID="";
+    StaggeredGridLayoutManager mLayoutmanager;
+    Database localDB;
 
     //search functionality
     FirebaseRecyclerAdapter<ProductModel, ProductViewHolder> searchAdapter;
     List<String> suggestList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
-    Database localDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
-        Log.d(TAG, "onCreate: Started");
-        setupBottomNavigationView();
+        setContentView(R.layout.activity_product_list);
+
         localDB = new Database(this);
-
-
-        /*Init Firebase*/
-        database = FirebaseDatabase.getInstance();
-        product = database.getReference().child("Product");
-        productQuery = product;
-
-        /*Load category*/
-        recycler_product = (RecyclerView) findViewById(R.id.recycler_product);
-        layoutManager = new LinearLayoutManager(this);
-        recycler_product.setHasFixedSize(true);
-        recycler_product.setLayoutManager(new GridLayoutManager(this,2));
-        recycler_product.setNestedScrollingEnabled(false);
-
+        setupBottomNavigationView();
         /*Get the intent data which is sent from CategoryActivit*/
         if(getIntent() != null)
             CategoryID = getIntent().getStringExtra("CategoryID");
         if(!CategoryID.isEmpty())
         {
-            loadProduct(CategoryID);
+            Toast.makeText(this, "got it", Toast.LENGTH_SHORT).show();
+            productQuery = productRef;
         }
-        adapterProduct.startListening();
-        recycler_product.setAdapter(adapterProduct);
 
+        database = FirebaseDatabase.getInstance();
+        productRef = database.getReference().child("Product");
+        productQuery = productRef;
+        mLayoutmanager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        prod_recycler = (RecyclerView) findViewById(R.id.prod_recycler);
+        loadProduct(CategoryID);
+        prod_recycler.setLayoutManager(new GridLayoutManager(this,2));
+        prod_recycler.setAdapter(adapter);
 
         /*Search functions*/
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
@@ -108,7 +94,6 @@ public class ProductActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                /*Suggest list will change according to the text input from users*/
                 List<String> suggest = new ArrayList<String>();
                 for(String search:suggestList)
                 {
@@ -128,7 +113,7 @@ public class ProductActivity extends AppCompatActivity {
             public void onSearchStateChanged(boolean enabled) {
                 //When search bar is close restore to original
                 if(!enabled)
-                    recycler_product.setAdapter(adapterProduct);
+                    prod_recycler.setAdapter(adapter);
             }
 
             @Override
@@ -144,17 +129,14 @@ public class ProductActivity extends AppCompatActivity {
 
             }
         });
-
     }
-
-
 
     private void startSearch(CharSequence text) {
         /*This is basically a query that will be included when creating the search adapter*/
         FirebaseRecyclerOptions searchOptions = new FirebaseRecyclerOptions.Builder<ProductModel>().
                 setQuery(productQuery.orderByChild("Name").startAt(text.toString()).
                                 endAt(text.toString()+"\uf8ff"),
-                ProductModel.class).build();
+                        ProductModel.class).build();
 
         searchAdapter = new FirebaseRecyclerAdapter<ProductModel, ProductViewHolder>(searchOptions) {
             @Override
@@ -167,11 +149,11 @@ public class ProductActivity extends AppCompatActivity {
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(ProductActivity.this, ""+clickItem.getName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductListActivity.this, ""+clickItem.getName(), Toast.LENGTH_SHORT).show();
 
                         /*Goes into Product Details*/
-                        Intent prodDetails = new Intent(ProductActivity.this, ProductDetails.class);
-                        prodDetails.putExtra("ProductID", adapterProduct.getRef(position).getKey());
+                        Intent prodDetails = new Intent(ProductListActivity.this, ProductDetails.class);
+                        prodDetails.putExtra("ProductID", adapter.getRef(position).getKey());
                         startActivity(prodDetails);
                     }
                 });
@@ -185,11 +167,11 @@ public class ProductActivity extends AppCompatActivity {
             }
         };
         searchAdapter.startListening();
-        recycler_product.setAdapter(searchAdapter);
+        prod_recycler.setAdapter(searchAdapter);
     }
 
     private void loadSuggested(){
-        product.orderByChild("CategoryID").equalTo(CategoryID).addValueEventListener(new ValueEventListener() {
+        productRef.orderByChild("CategoryID").equalTo(CategoryID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapShot:dataSnapshot.getChildren())
@@ -206,14 +188,14 @@ public class ProductActivity extends AppCompatActivity {
         });
     }
 
-    private void loadProduct(String categoryID) {
+    private void loadProduct(String x) {
         /*This is basically a query that will be included when creating the adapter. Matches the categoryID with the */
-        FirebaseRecyclerOptions productOptions = new FirebaseRecyclerOptions.Builder<ProductModel>().setQuery(productQuery.orderByChild("CategoryID").equalTo(categoryID),
+        FirebaseRecyclerOptions productOptions = new FirebaseRecyclerOptions.Builder<ProductModel>().setQuery(productQuery.orderByChild("CategoryID").equalTo(x),
                 ProductModel.class).build();
 
         /*The firebase recycler adapter. which takes the products depending on the category from the firebase.
-        * It creates a recycler view and shows*/
-        adapterProduct = new FirebaseRecyclerAdapter<ProductModel, ProductViewHolder>(productOptions) {
+         * It creates a recycler view and shows*/
+        adapter = new FirebaseRecyclerAdapter<ProductModel, ProductViewHolder>(productOptions) {
 
 
             @Override
@@ -221,33 +203,34 @@ public class ProductActivity extends AppCompatActivity {
                 holder.textProductName.setText(model.getName());
                 Picasso.get().load(model.getImage()).into(holder.imageViewProduct);
                 holder.textProductPrice.setText(model.getPrice());
-                if(localDB.isfavorites(adapterProduct.getRef(position).getKey()))
+                if(localDB.isfavorites(adapter.getRef(position).getKey()))
                     holder.favorite_image.setImageResource(R.drawable.ic_favorite_black_24dp);
 
                 holder.favorite_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(!localDB.isfavorites(adapterProduct.getRef(position).getKey()))
+                        if(!localDB.isfavorites(adapter.getRef(position).getKey()))
                         {
-                            localDB.addtofavorites(adapterProduct.getRef(position).getKey());
+                            localDB.addtofavorites(adapter.getRef(position).getKey());
                             holder.favorite_image.setImageResource(R.drawable.ic_favorite_black_24dp);
                         }
                         else{
-                            localDB.deletefromfavorites(adapterProduct.getRef(position).getKey());
+                            localDB.deletefromfavorites(adapter.getRef(position).getKey());
                             holder.favorite_image.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                         }
 
                     }
                 });
+
                 final ProductModel clickItem = model;
                 holder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        Toast.makeText(ProductActivity.this, ""+clickItem.getName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductListActivity.this, ""+clickItem.getName(), Toast.LENGTH_SHORT).show();
 
                         /*Goes into Product Details*/
-                        Intent prodDetails = new Intent(ProductActivity.this, ProductDetails.class);
-                        prodDetails.putExtra("ProductID", adapterProduct.getRef(position).getKey());
+                        Intent prodDetails = new Intent(ProductListActivity.this, ProductDetails.class);
+                        prodDetails.putExtra("ProductID", adapter.getRef(position).getKey());
                         startActivity(prodDetails);
                     }
                 });
@@ -262,25 +245,24 @@ public class ProductActivity extends AppCompatActivity {
         };
     }
 
-    /*Must include onstart and onstop for firebaserecycleradapter*/
     @Override
     protected void onStart() {
         super.onStart();
-        adapterProduct.startListening();
+        adapter.startListening();
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        adapterProduct.stopListening();
+        adapter.stopListening();
     }
 
     /*BottomNavigationView Setup*/
     private void setupBottomNavigationView(){
-        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
+        Log.d("Prod List", "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavViewBar);
-        BottomNavigationViewHelper.enableNavigation(ProductActivity.this,bottomNavigationView);
+        BottomNavigationViewHelper.enableNavigation(ProductListActivity.this,bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
