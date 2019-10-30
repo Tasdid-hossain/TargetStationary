@@ -25,14 +25,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_below="@+id/relativeLayout1"
-            android:layout_marginTop="80dp">
+            android:layout_below="@+id/relativeLayout1">
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/search_edit_text"
-                android:hint="Search Text..."
+                android:hint="Search anything..."
                 android:layout_margin="10dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
