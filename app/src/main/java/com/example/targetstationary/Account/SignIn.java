@@ -6,15 +6,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.targetstationary.Category.CategoryActivity;
+import com.example.targetstationary.CircleTransform;
 import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.Model.UserModel;
 import com.example.targetstationary.ProductListActivity;
 import com.example.targetstationary.ProductDetails;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
+import com.example.targetstationary.database.Database;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -40,6 +44,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,14 +54,15 @@ public class SignIn extends AppCompatActivity {
     private static final int MY_REQUEST_CODE = 1971;
     List<AuthUI.IdpConfig> providers;
     Button btn_sign_out,update;
-    TextView fName, total_orders, user_email,  user_address, user_payment, user_phone;
+    TextView fName, total_orders, user_email,  user_address, user_payment, user_phone, total_favorites;
+    ImageView profile_pic;
     private static final String TAG = "AccountActivity";
     private static final int ACTIVITY_NUM =4;
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
     DatabaseReference database;
-
+    Database localDB;
     DatabaseReference userData;
 
     @Override
@@ -69,7 +75,9 @@ public class SignIn extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance().getReference("Orders");
         userData = FirebaseDatabase.getInstance().getReference("Users");
+        profile_pic = (ImageView) findViewById(R.id.profile_pic);
 
+        localDB = new Database(this);
         fName = (TextView) findViewById(R.id.first_name);
         user_email = (TextView) findViewById(R.id.user_email);
         user_phone = (TextView) findViewById(R.id.user_phone);
@@ -77,6 +85,7 @@ public class SignIn extends AppCompatActivity {
         user_payment = (TextView) findViewById(R.id.user_payment);
         total_orders = (TextView) findViewById(R.id.total_orders);
         btn_sign_out = (Button) findViewById(R.id.btn_sign_out);
+        total_favorites = (TextView) findViewById(R.id.total_favorites);
         btn_sign_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,6 +195,15 @@ public class SignIn extends AppCompatActivity {
         }
     }
 
+    public int getItemsCount() {
+        String countQuery = "SELECT  * FROM " + "Favorites";
+        SQLiteDatabase db = localDB.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
     private void loadData(){
         userData.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
@@ -195,11 +213,17 @@ public class SignIn extends AppCompatActivity {
                     user_address.setText(userModel.getAddress());
                     user_payment.setText(userModel.getPayment());
                     user_phone.setText(userModel.getPhone());
+                    Picasso.get().load(currentUser.getPhotoUrl().toString()).into(profile_pic);
+
+                    total_favorites.setText(String.valueOf(getItemsCount()));
                 }
                 else{
                     user_address.setText("Please update address!");
                     user_phone.setText("Please update phone number!");
                     user_payment.setText("Please enter payment method!");
+                    total_favorites.setText("No Favorite");
+                    //Picasso.get().load(currentUser.getPhotoUrl().toString()).into(profile_pic);
+                    Picasso.get().load(currentUser.getPhotoUrl().toString()).transform(new CircleTransform()).into(profile_pic);
                 }
             }
 

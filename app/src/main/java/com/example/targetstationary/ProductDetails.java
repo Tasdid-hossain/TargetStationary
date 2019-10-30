@@ -1,12 +1,17 @@
 package com.example.targetstationary;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import me.relex.circleindicator.CircleIndicator;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,6 +20,7 @@ import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.targetstationary.Cart.CartActivity;
+import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.Model.ImageListModel;
 import com.example.targetstationary.Model.OrderModel;
 import com.example.targetstationary.Model.ProductModel;
@@ -58,6 +64,15 @@ public class ProductDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
 
+        /*Toolbars*/
+        /*Toolbar*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tabs);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setTitle("Product Details");
+
+
         /*Firebase init*/
         database = FirebaseDatabase.getInstance();
         singleProduct = database.getReference("Product");
@@ -94,6 +109,7 @@ public class ProductDetails extends AppCompatActivity {
         cartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 new Database(getBaseContext()).addToCart(new OrderModel(
                         ProductID, currentProduct.getName(), numberButton.getNumber() ,currentProduct.getPrice(), "10"
                 ));
@@ -142,4 +158,30 @@ public class ProductDetails extends AppCompatActivity {
             }
         });
     }
+
+    /*Toolbar*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toptoolmenu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.ic_cartTop){
+            Intent i = new Intent(ProductDetails.this, CartActivity.class);
+            startActivity(i);
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
 }

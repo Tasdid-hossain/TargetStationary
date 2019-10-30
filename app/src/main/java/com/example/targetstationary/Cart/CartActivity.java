@@ -1,5 +1,6 @@
 package com.example.targetstationary.Cart;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.example.targetstationary.Account.SignIn;
 import com.example.targetstationary.Model.OrderModel;
 import com.example.targetstationary.Model.Request;
+import com.example.targetstationary.ProductDetails;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.CartAdapter;
@@ -30,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -84,7 +87,26 @@ public class CartActivity extends AppCompatActivity {
                     Toast.makeText(CartActivity.this, "Please login to place the order", Toast.LENGTH_SHORT).show();
                 else
                 {
-                    Request request = new Request(
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CartActivity.this);
+                    builder.setTitle("Purchase type");
+                    builder.setMessage("How would you like to receive your product?");
+                    builder.setPositiveButton("Pickup", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.setNeutralButton("Delivery", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    /*Request request = new Request(
                             currentUser.getPhoneNumber(),
                             totalPrice.getText().toString(),
                             currentUser.getDisplayName(),
@@ -95,7 +117,7 @@ public class CartActivity extends AppCompatActivity {
 
                     requests.child(currentUser.getUid()).child(String.valueOf(Calendar.getInstance().getTime())).setValue(request);
                     new Database(getBaseContext()).cleanCart();
-                    finish();
+                    finish();*/
                 }
 
             }

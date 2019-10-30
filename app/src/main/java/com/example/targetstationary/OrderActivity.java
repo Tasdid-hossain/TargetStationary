@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.targetstationary.Category.CategoryActivity;
@@ -19,6 +20,7 @@ import com.example.targetstationary.Model.Request;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.CategoryViewHolder;
 import com.example.targetstationary.ViewHolder.OrderViewHolder;
+import com.example.targetstationary.database.Database;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -53,6 +55,9 @@ public class OrderActivity extends AppCompatActivity {
     FirebaseRecyclerAdapter<Request, OrderViewHolder> adapter;
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
+
+    TextView textCartItemCount;
+    Database localDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

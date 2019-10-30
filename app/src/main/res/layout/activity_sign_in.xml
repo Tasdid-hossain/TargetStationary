@@ -39,6 +39,7 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:id="@+id/profile_pic"
                         android:src="@drawable/back_to_home_button"/>
 
                     <TextView
@@ -97,7 +98,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Reviews"
+                                android:text="Favorites"
                                 android:textSize="20sp"/>
 
                             <TextView
@@ -107,6 +108,7 @@
                                 style="bold"
                                 android:textSize="20sp"
                                 android:paddingTop="10dp"
+                                android:id="@+id/total_favorites"
                                 android:textColor="@color/startblue"
                                 android:textStyle="bold"/>
                         </LinearLayout>

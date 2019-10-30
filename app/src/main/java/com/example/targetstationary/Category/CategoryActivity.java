@@ -3,11 +3,15 @@ package com.example.targetstationary.Category;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,15 +19,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.targetstationary.Cart.CartActivity;
+import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.Interface.ItemClickListener;
 import com.example.targetstationary.Model.CategoryModel;
+import com.example.targetstationary.ProductDetails;
 import com.example.targetstationary.ProductListActivity;
 import com.example.targetstationary.ProductListActivity;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.CategoryViewHolder;
+import com.example.targetstationary.database.Database;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,7 +45,8 @@ public class CategoryActivity extends AppCompatActivity {
 
     private static final String TAG = "CategoryActivity";
     private static final int ACTIVITY_NUM =1;
-
+    TextView textCartItemCount;
+    Database localDB;
     FirebaseDatabase database;
     DatabaseReference category;
     Query categoryQuery;
@@ -51,6 +61,11 @@ public class CategoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_category);
         Log.d(TAG, "onCreate: Started");
         setupBottomNavigationView();
+
+        /*Toolbar*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.tabs);
+        setSupportActionBar(toolbar);
+        localDB = new Database(this);
 
         /*Init Firebase*/
         database = FirebaseDatabase.getInstance();
@@ -114,6 +129,66 @@ public class CategoryActivity extends AppCompatActivity {
         adapter.stopListening();
     }
 
+    /*Toolbar*/
+    /*Toolbar*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toptoolmenu, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.ic_cartTop);
+
+        View actionView = MenuItemCompat.getActionView(menuItem);
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+
+        setupBadge();
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
+        return true;
+    }
+
+    public int getItemsCount() {
+        String countQuery = "SELECT  * FROM " + "OrderDetails";
+        SQLiteDatabase db = localDB.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    private void setupBadge() {
+        int m = 10;
+        if (textCartItemCount != null) {
+            if (m == 0) {
+                if (textCartItemCount.getVisibility() != View.GONE) {
+                    textCartItemCount.setVisibility(View.GONE);
+                }
+            } else {
+                textCartItemCount.setText(String.valueOf(Math.min(getItemsCount(), 99)));
+                localDB.close();
+                if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                    textCartItemCount.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.ic_cartTop){
+            Intent i = new Intent(CategoryActivity.this, CartActivity.class);
+            startActivity(i);
+            return true;
+        }
+        else
+            return super.onOptionsItemSelected(item);
+    }
     /*BottomNavigationView Setup*/
     private void setupBottomNavigationView(){
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
