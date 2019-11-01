@@ -96,4 +96,16 @@ public class Database extends SQLiteAssetHelper {
         cursor.close();
         return true;
     }
+
+    public boolean isAddedToCart(String prodID){
+        SQLiteDatabase db = getReadableDatabase();
+        String query = String.format("SELECT * FROM OrderDetails WHERE ProductID='%s';", prodID);
+        Cursor cursor = db.rawQuery(query,null);
+        if(cursor.getCount()<=0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
 }

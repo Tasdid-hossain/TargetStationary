@@ -109,14 +109,19 @@ public class ProductDetails extends AppCompatActivity {
         cartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(new Database(getBaseContext()).isAddedToCart(ProductID)){
+                    Toast.makeText(ProductDetails.this, "Already in cart", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    new Database(getBaseContext()).addToCart(new OrderModel(
+                            ProductID, currentProduct.getName(), numberButton.getNumber() ,currentProduct.getPrice(), "10"
+                    ));
 
-                new Database(getBaseContext()).addToCart(new OrderModel(
-                        ProductID, currentProduct.getName(), numberButton.getNumber() ,currentProduct.getPrice(), "10"
-                ));
+                    Toast.makeText(ProductDetails.this, "Added to cart", Toast.LENGTH_SHORT).show();
+                    Intent prodDetails = new Intent(ProductDetails.this, CartActivity.class);
+                    startActivity(prodDetails);
 
-                Toast.makeText(ProductDetails.this, "Added to cart", Toast.LENGTH_SHORT).show();
-                Intent prodDetails = new Intent(ProductDetails.this, CartActivity.class);
-                startActivity(prodDetails);
+                }
             }
         });
     }
@@ -128,12 +133,6 @@ public class ProductDetails extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentProduct = dataSnapshot.getValue(ProductModel.class);
                 ImageListModel imageListModel = dataSnapshot.child("imageList").getValue(ImageListModel.class);
-
-                /*Set Image*/
-/*                Picasso.get().load(imageListModel.getImage1()).into(imageView1);
-                Picasso.get().load(imageListModel.getImage2()).into(imageView2);
-                Picasso.get().load(imageListModel.getImage3()).into(imageView3);
-                Picasso.get().load(imageListModel.getImage4()).into(imageView4);*/
 
                 myPager = new MyPager(getBaseContext());
                 myPager.images.add(imageListModel.getImage1());
