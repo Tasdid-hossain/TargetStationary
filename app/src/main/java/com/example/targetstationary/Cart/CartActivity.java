@@ -93,31 +93,47 @@ public class CartActivity extends AppCompatActivity {
                     builder.setPositiveButton("Pickup", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Request request = new Request(
+                                    currentUser.getPhoneNumber(),
+                                    totalPrice.getText().toString(),
+                                    currentUser.getDisplayName(),
+                                    "Order received for pickup",
+                                    cart
+                            );
+                            Toast.makeText(CartActivity.this, "Your order has been placed for pickup!", Toast.LENGTH_SHORT).show();
+
+                            requests.child(currentUser.getUid()).child(String.valueOf(Calendar.getInstance().getTime())).setValue(request);
+                            new Database(getBaseContext()).cleanCart();
+                            finish();
+
                             dialog.cancel();
                         }
                     });
                     builder.setNeutralButton("Delivery", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Request request = new Request(
+                                    currentUser.getPhoneNumber(),
+                                    totalPrice.getText().toString(),
+                                    currentUser.getDisplayName(),
+                                    "Order received for delivery",
+                                    cart
+                            );
+                            Toast.makeText(CartActivity.this, "Your order has been placed for delivery!", Toast.LENGTH_SHORT).show();
+
+                            requests.child(currentUser.getUid()).child(String.valueOf(Calendar.getInstance().getTime())).setValue(request);
+                            new Database(getBaseContext()).cleanCart();
+                            finish();
+
                             dialog.cancel();
+
                         }
                     });
 
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
 
-                    /*Request request = new Request(
-                            currentUser.getPhoneNumber(),
-                            totalPrice.getText().toString(),
-                            currentUser.getDisplayName(),
-                            "Order Received",
-                            cart
-                    );
-                    Toast.makeText(CartActivity.this, "Your order has been placed!", Toast.LENGTH_SHORT).show();
-
-                    requests.child(currentUser.getUid()).child(String.valueOf(Calendar.getInstance().getTime())).setValue(request);
-                    new Database(getBaseContext()).cleanCart();
-                    finish();*/
+                    /**/
                 }
 
             }
