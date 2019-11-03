@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Request {
-    public String phone;
+    public String address;
     public String total;
     public String displayName;
     public String status;
@@ -13,8 +13,8 @@ public class Request {
     public Request() {
     }
 
-    public Request(String phone, String total, String displayName, String status, ArrayList<OrderModel> orders) {
-        this.phone = phone;
+    public Request(String address, String total, String displayName, String status, ArrayList<OrderModel> orders) {
+        this.address = address;
         this.total = total;
         this.displayName = displayName;
         this.status = status;
@@ -22,11 +22,11 @@ public class Request {
     }
 
     public String getPhone() {
-        return phone;
+        return address;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhone(String address) {
+        this.address = address;
     }
 
     public String getTotal() {

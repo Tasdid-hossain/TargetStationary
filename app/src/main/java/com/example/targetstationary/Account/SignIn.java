@@ -9,6 +9,7 @@ import com.example.targetstationary.Category.CategoryActivity;
 import com.example.targetstationary.CircleTransform;
 import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.Model.UserModel;
+import com.example.targetstationary.OrderActivity;
 import com.example.targetstationary.ProductListActivity;
 import com.example.targetstationary.ProductDetails;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
@@ -53,7 +54,7 @@ public class SignIn extends AppCompatActivity {
 
     private static final int MY_REQUEST_CODE = 1971;
     List<AuthUI.IdpConfig> providers;
-    Button btn_sign_out,update;
+    Button btn_sign_out,update,btn_vieworder;
     TextView fName, total_orders, user_email,  user_address, user_payment, user_phone, total_favorites;
     ImageView profile_pic;
     private static final String TAG = "AccountActivity";
@@ -85,6 +86,7 @@ public class SignIn extends AppCompatActivity {
         user_payment = (TextView) findViewById(R.id.user_payment);
         total_orders = (TextView) findViewById(R.id.total_orders);
         btn_sign_out = (Button) findViewById(R.id.btn_sign_out);
+        btn_vieworder = (Button) findViewById(R.id.btn_viewOrders);
         total_favorites = (TextView) findViewById(R.id.total_favorites);
         btn_sign_out.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +96,8 @@ public class SignIn extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
+                                SQLiteDatabase db = localDB.getReadableDatabase();
+                                db.execSQL("delete from OrderDetails");
                                 btn_sign_out.setEnabled(false);
                                 showSignInOptions();
                                 Intent i = new Intent(SignIn.this, MainActivity.class);
@@ -112,6 +116,14 @@ public class SignIn extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(SignIn.this, UpdateAccount.class);
+                startActivity(i);
+            }
+        });
+
+        btn_vieworder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SignIn.this, OrderActivity.class);
                 startActivity(i);
             }
         });
@@ -156,10 +168,7 @@ public class SignIn extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
+
 
     @Override
     public void onStart() {
@@ -195,6 +204,12 @@ public class SignIn extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(SignIn.this, MainActivity.class);
+        startActivity(i);
+    }
+
     public int getItemsCount() {
         String countQuery = "SELECT  * FROM " + "Favorites";
         SQLiteDatabase db = localDB.getReadableDatabase();
@@ -213,7 +228,8 @@ public class SignIn extends AppCompatActivity {
                     user_address.setText(userModel.getAddress());
                     user_payment.setText(userModel.getPayment());
                     user_phone.setText(userModel.getPhone());
-                    Picasso.get().load(currentUser.getPhotoUrl().toString()).into(profile_pic);
+                    if(currentUser.getPhotoUrl()!=null)
+                        Picasso.get().load(currentUser.getPhotoUrl().toString()).into(profile_pic);
 
                     total_favorites.setText(String.valueOf(getItemsCount()));
                 }

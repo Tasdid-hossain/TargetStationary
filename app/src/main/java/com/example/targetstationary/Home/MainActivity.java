@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         localDB = new Database(this);
 
+
         /*Firebase init*/
         database = FirebaseDatabase.getInstance();
         eventRef = database.getReference("Events");

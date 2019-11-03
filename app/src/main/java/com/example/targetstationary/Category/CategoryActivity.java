@@ -65,6 +65,7 @@ public class CategoryActivity extends AppCompatActivity {
         /*Toolbar*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.tabs);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Store");
         localDB = new Database(this);
 
         /*Init Firebase*/

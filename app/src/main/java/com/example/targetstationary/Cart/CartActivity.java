@@ -1,6 +1,8 @@
 package com.example.targetstationary.Cart;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,8 +23,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -31,6 +36,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,6 +52,7 @@ public class CartActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference requests;
+    DatabaseReference userAddress;
 
     public TextView totalPrice;
     ArrayList <OrderModel> cart = new ArrayList<>();
@@ -54,6 +61,7 @@ public class CartActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    String uAddress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +79,7 @@ public class CartActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         requests = database.getReference("Orders");
+        userAddress  = database.getReference("Users");
 
         recyclerViewCart = (RecyclerView) findViewById(R.id.cartRecycler);
         recyclerViewCart.setHasFixedSize(true);
@@ -87,6 +96,7 @@ public class CartActivity extends AppCompatActivity {
                     Toast.makeText(CartActivity.this, "Please login to place the order", Toast.LENGTH_SHORT).show();
                 else
                 {
+                    getAddress();
                     AlertDialog.Builder builder = new AlertDialog.Builder(CartActivity.this);
                     builder.setTitle("Purchase type");
                     builder.setMessage("How would you like to receive your product?");
@@ -94,7 +104,7 @@ public class CartActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Request request = new Request(
-                                    currentUser.getPhoneNumber(),
+                                    uAddress.replace("\n",""),
                                     totalPrice.getText().toString(),
                                     currentUser.getDisplayName(),
                                     "Order received for pickup",
@@ -105,7 +115,15 @@ public class CartActivity extends AppCompatActivity {
                             requests.child(currentUser.getUid()).child(String.valueOf(Calendar.getInstance().getTime())).setValue(request);
                             new Database(getBaseContext()).cleanCart();
                             finish();
+                            /*String uri = String.format(Locale.ENGLISH, "geo:%f,%f", 1.541154, 110.315228);
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                            startActivity(intent);*/
 
+                            String my_data= String.format(Locale.ENGLISH, "http://maps.google.com/maps?daddr=1.541154,110.315228(My Destination Place)");
+
+                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(my_data));
+                            intent.setPackage("com.google.android.apps.maps");
+                            startActivity(intent);
                             dialog.cancel();
                         }
                     });
@@ -113,7 +131,7 @@ public class CartActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Request request = new Request(
-                                    currentUser.getPhoneNumber(),
+                                    uAddress.replace("\n",""),
                                     totalPrice.getText().toString(),
                                     currentUser.getDisplayName(),
                                     "Order received for delivery",
@@ -141,6 +159,23 @@ public class CartActivity extends AppCompatActivity {
 
         loadListProduct();
     }
+
+    private void getAddress(){
+        userAddress.child(currentUser.getUid()).child("address").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue()!=null)
+                    uAddress = dataSnapshot.getValue().toString();
+                else
+                    uAddress="no address";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    };
 
     /*BottomNavigationView Setup*/
     private void setupBottomNavigationView(){
