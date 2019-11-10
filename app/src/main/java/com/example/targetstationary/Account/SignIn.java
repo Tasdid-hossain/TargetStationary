@@ -25,9 +25,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,12 +57,13 @@ public class SignIn extends AppCompatActivity {
     private static final int MY_REQUEST_CODE = 1971;
     List<AuthUI.IdpConfig> providers;
     Button btn_sign_out,update,btn_vieworder;
-    TextView fName, total_orders, user_email,  user_address, user_payment, user_phone, total_favorites;
+    TextView fName, total_orders, user_email,  user_address, user_payment, user_phone, total_favorites, user_type;
     ImageView profile_pic;
     private static final String TAG = "AccountActivity";
     private static final int ACTIVITY_NUM =4;
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
+
 
     DatabaseReference database;
     Database localDB;
@@ -78,6 +81,7 @@ public class SignIn extends AppCompatActivity {
         userData = FirebaseDatabase.getInstance().getReference("Users");
         profile_pic = (ImageView) findViewById(R.id.profile_pic);
 
+
         localDB = new Database(this);
         fName = (TextView) findViewById(R.id.first_name);
         user_email = (TextView) findViewById(R.id.user_email);
@@ -88,6 +92,8 @@ public class SignIn extends AppCompatActivity {
         btn_sign_out = (Button) findViewById(R.id.btn_sign_out);
         btn_vieworder = (Button) findViewById(R.id.btn_viewOrders);
         total_favorites = (TextView) findViewById(R.id.total_favorites);
+        user_type = (TextView) findViewById(R.id.user_type);
+
         btn_sign_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,16 +236,18 @@ public class SignIn extends AppCompatActivity {
                     user_phone.setText(userModel.getPhone());
                     if(currentUser.getPhotoUrl()!=null)
                         Picasso.get().load(currentUser.getPhotoUrl().toString()).into(profile_pic);
-
                     total_favorites.setText(String.valueOf(getItemsCount()));
+                    user_type.setText(userModel.getUserType());
                 }
                 else{
                     user_address.setText("Please update address!");
                     user_phone.setText("Please update phone number!");
                     user_payment.setText("Please enter payment method!");
                     total_favorites.setText("No Favorite");
+                    user_type.setText("Update your type");
                     //Picasso.get().load(currentUser.getPhotoUrl().toString()).into(profile_pic);
-                    Picasso.get().load(currentUser.getPhotoUrl().toString()).transform(new CircleTransform()).into(profile_pic);
+                    if(currentUser.getPhotoUrl()!=null)
+                        Picasso.get().load(currentUser.getPhotoUrl().toString()).transform(new CircleTransform()).into(profile_pic);
                 }
             }
 

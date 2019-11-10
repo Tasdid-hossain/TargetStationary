@@ -6,16 +6,18 @@ public class UserModel {
     public String email;
     public String address;
     public String payment;
+    public String userType;
 
     public UserModel() {
     }
 
-    public UserModel(String displayName, String phone, String email, String address, String payment) {
+    public UserModel(String displayName, String phone, String email, String address, String payment, String userType) {
         this.displayName = displayName;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.payment = payment;
+        this.userType = userType;
     }
 
     public String getDisplayName() {
@@ -56,5 +58,13 @@ public class UserModel {
 
     public void setPayment(String payment) {
         this.payment = payment;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

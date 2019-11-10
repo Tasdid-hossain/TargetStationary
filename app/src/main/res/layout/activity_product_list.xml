@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/relativeLayout3">
-
             <!-- <include layout="@layout/layout_top_tabs"/>-->
             <com.mancj.materialsearchbar.MaterialSearchBar
                 style="@style/MaterialSearchBarLight"
@@ -38,7 +37,6 @@
             android:layout_below="@+id/relativeLayout3"
             android:layout_marginTop="20dp"
             >
-
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +48,6 @@
             </androidx.recyclerview.widget.RecyclerView>
 
         </RelativeLayout>
-
         <!-- Bottom navigation -->
         <include layout="@layout/layout_bottom_navigation_view"/>
 

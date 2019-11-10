@@ -21,7 +21,11 @@
         </RelativeLayout>
 
         <!-- Middle section (body) -->
-
+        <ScrollView android:id="@+id/scrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_marginBottom="70dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -227,6 +231,27 @@
                         android:id="@+id/edit_payment"/>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:paddingLeft="30dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_verified_user_black_24dp"/>
+
+                    <Spinner
+                        android:id="@+id/update_user_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingLeft="20dp"
+                        android:spinnerMode="dropdown"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -252,7 +277,7 @@
                     android:text="Cancel"/>
             </LinearLayout>
         </LinearLayout>
-
+        </ScrollView>
         <!-- Bottom navigation -->
         <include layout="@layout/layout_bottom_navigation_view"/>
 
