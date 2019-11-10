@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,20 +25,28 @@ import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.Model.ImageListModel;
 import com.example.targetstationary.Model.OrderModel;
 import com.example.targetstationary.Model.ProductModel;
+import com.example.targetstationary.Model.Rating;
 import com.example.targetstationary.ViewHolder.MyPager;
 import com.example.targetstationary.database.Database;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+import com.stepstone.apprating.AppRatingDialog;
+import com.stepstone.apprating.listener.RatingDialogListener;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProductDetails extends AppCompatActivity {
+public class ProductDetails extends AppCompatActivity implements RatingDialogListener {
 
     TextView singleProduct_name, singleProduct_price, singleProduct_description;
    // ImageView singleProduct_image;
@@ -45,24 +54,29 @@ public class ProductDetails extends AppCompatActivity {
     ElegantNumberButton numberButton;
     Button cartBtn;
     ProductModel currentProduct;
+    FloatingActionButton btnRating;
+    RatingBar ratingBar;
+    private FirebaseAuth mAuth;
+    FirebaseUser currentUser;
 
     /*VIEWPAGER*/
     private ViewPager viewPager;
     private CircleIndicator circleIndicator;
     private MyPager myPager;
 
-//    private ImageView singleProduct_image;!!!!!!!!!!!!!!!!!!!!!!
-
 
     String ProductID = "";
 
     FirebaseDatabase database;
     DatabaseReference singleProduct;
+    DatabaseReference ratingTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_details);
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
 
         /*Toolbars*/
         /*Toolbar*/
@@ -76,6 +90,16 @@ public class ProductDetails extends AppCompatActivity {
         /*Firebase init*/
         database = FirebaseDatabase.getInstance();
         singleProduct = database.getReference("Product");
+        ratingTable = database.getReference("Rating");
+
+        btnRating = (FloatingActionButton) findViewById(R.id.btn_rating);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        btnRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRatingDialog();
+            }
+        });
 
         /*View init*/
         numberButton = (ElegantNumberButton) findViewById(R.id.number_button);
@@ -104,6 +128,7 @@ public class ProductDetails extends AppCompatActivity {
         if(!ProductID.isEmpty())
         {
             getDetailProduct(ProductID);
+            loadRating(ProductID);
         }
 
         cartBtn.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +149,45 @@ public class ProductDetails extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void loadRating(String productID) {
+        Query prodrate = ratingTable.orderByChild("productID").equalTo(productID);
+        prodrate.addValueEventListener(new ValueEventListener() {
+            int count=0, sum=0;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnapShot:dataSnapshot.getChildren()){
+                    Rating item = postSnapShot.getValue(Rating.class);
+                    sum += Integer.parseInt(item.getRateValue());
+                    count++;
+                }
+                if(count!=0){
+                    float average = sum/count;
+                    ratingBar.setRating(average);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void showRatingDialog() {
+        new AppRatingDialog.Builder()
+                .setPositiveButtonText("Submit")
+                .setNegativeButtonText("Cancel")
+                .setNoteDescriptions(Arrays.asList("Poor", "Bad", "Okay", "Good", "Excellent"))
+                .setDefaultRating(1)
+                .setTitle("Rate this item")
+                .setDescription("Rate the item by giving stars")
+                .setHint("Write comment here")
+                .setCommentBackgroundColor(R.color.com_facebook_button_background_color)
+                .setWindowAnimation(R.style.RatingDialogFadeAnim)
+                .create(ProductDetails.this).show();
     }
 
 
@@ -183,4 +247,37 @@ public class ProductDetails extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onNegativeButtonClicked() {
+
+    }
+
+    @Override
+    public void onNeutralButtonClicked() {
+
+    }
+
+    @Override
+    public void onPositiveButtonClicked(int i, String s) {
+        Rating rating = new Rating(currentUser.getUid(), ProductID, String.valueOf(i), s);
+        ratingTable.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child(currentUser.getUid()).exists()){
+                    ratingTable.child(currentUser.getUid()).removeValue();
+                    ratingTable.child(currentUser.getUid()).setValue(rating);
+                }
+                else{
+                    ratingTable.child(currentUser.getUid()).setValue(rating);
+                }
+
+                Toast.makeText(ProductDetails.this, "Thank you for rating!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

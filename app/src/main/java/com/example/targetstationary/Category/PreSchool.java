@@ -47,7 +47,7 @@ public class PreSchool extends AppCompatActivity {
 
     RecyclerView recyclerViewPreSchool;
     RecyclerView.LayoutManager layoutManager;
-
+    ArrayList<ProductModel> object;
     ProdAdapter adapter;
 
     @Override
@@ -64,10 +64,13 @@ public class PreSchool extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerViewPreSchool.setLayoutManager(layoutManager);
 
+
         Intent intent = getIntent();
-        ArrayList<ProductModel> object = intent.getExtras().getParcelableArrayList("List");
-/*
+        if(object==null)
+            object = intent.getExtras().getParcelableArrayList("List");
+        /*
         loadProducts();*/
+
         createView(object);
     }
 
@@ -142,5 +145,12 @@ public class PreSchool extends AppCompatActivity {
             return listData.size();
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        object.clear();
     }
 }

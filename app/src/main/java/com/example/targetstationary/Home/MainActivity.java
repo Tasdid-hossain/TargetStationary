@@ -117,6 +117,14 @@ public class MainActivity extends AppCompatActivity {
         scecondaryschoolImage = (ImageView) findViewById(R.id.secondaryschoolImage);
 
         /*LOAD DATA*/
+        if(productsPreschool!=null)
+            productsPreschool.clear();
+        if(productsPrimary!=null)
+            productsPrimary.clear();
+        if(productsSecondary!=null)
+            productsSecondary.clear();
+        if(productsCollege!=null)
+            productsCollege.clear();
         loadProducts(preschool, productsPreschool);
         loadProducts(primaryschool, productsPrimary);
         loadProducts(secondaryschool, productsSecondary);

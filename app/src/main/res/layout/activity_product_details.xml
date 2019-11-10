@@ -57,6 +57,18 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        android:backgroundTint="@color/white"
+        android:id="@+id/btn_rating"
+        android:src="@drawable/ic_star_black_24dp"
+        app:layout_anchorGravity="bottom|right|start"
+        app:layout_anchor="@id/appbarLayout"
+        app:useCompatPadding="true"/>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
@@ -145,15 +157,29 @@
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
 
-                <TextView
-                    android:id="@+id/singleProduct_description"
-                    android:layout_marginTop="12dp"
-                    android:lineSpacingMultiplier="1.5"
-                    android:text="Description"
-                    android:padding="12dp"
-                    android:textSize="14sp"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ratingBar"
+                        android:isIndicator="true"
+                        android:rating="0"
+                        android:max="5"/>
+
+                    <TextView
+                        android:id="@+id/singleProduct_description"
+                        android:layout_marginTop="12dp"
+                        android:lineSpacingMultiplier="1.5"
+                        android:text="Description"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>
