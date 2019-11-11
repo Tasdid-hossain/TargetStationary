@@ -64,7 +64,8 @@
                 android:layout_width="66dp"
                 android:layout_height="66dp"
                 app:civ_border_width="2dp"
-                app:civ_border_color="#FF000000"
+                app:civ_border_color="#1d76f2"
+                app:civ_circle_background_color="#689ce3"
                 android:layout_below="@id/textMain"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
@@ -76,7 +77,8 @@
                 android:layout_width="66dp"
                 android:layout_height="66dp"
                 app:civ_border_width="2dp"
-                app:civ_border_color="#FF000000"
+                app:civ_border_color="#1bb39f"
+                app:civ_circle_background_color="#74dbce"
                 android:layout_below="@id/textMain"
                 android:layout_margin="10dp"
                 android:layout_toRightOf="@id/preSchoolImage"
@@ -84,27 +86,30 @@
 
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/primaryschoolImage"
                 android:layout_width="66dp"
                 android:layout_height="66dp"
                 app:civ_border_width="2dp"
-                app:civ_border_color="#FF000000"
+                android:layout_below="@id/textMain"
+                android:layout_margin="10dp"
+                app:civ_border_color="#1bb39f"
+                app:civ_circle_background_color="#74dbce"
+                android:id="@+id/collegeuniImage"
+                android:layout_toRightOf="@id/primaryschoolImage"
+                android:src="@drawable/collegeuni"/>
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/primaryschoolImage"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                app:civ_border_color="#1d76f2"
+                app:civ_circle_background_color="#689ce3"
+                app:civ_border_width="2dp"
                 android:layout_below="@id/textMain"
                 android:layout_margin="10dp"
                 android:layout_toRightOf="@id/secondaryschoolImage"
                 android:src="@drawable/primaryschool"/>
 
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/collegeuniImage"
-                android:layout_width="66dp"
-                android:layout_height="66dp"
-                app:civ_border_width="2dp"
-                app:civ_border_color="#FF000000"
-                android:layout_below="@id/textMain"
-                android:layout_margin="10dp"
-                android:layout_toRightOf="@id/primaryschoolImage"
-                android:src="@drawable/collegeuni"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -113,6 +118,8 @@
                 android:id="@+id/stagger_main"
                 app:item_margin="8dp"
                 app:column_count="2"/>
+
+
 
         </RelativeLayout>
         </ScrollView>

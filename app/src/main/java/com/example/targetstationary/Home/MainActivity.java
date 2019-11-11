@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseRecyclerAdapter<ProductModel, ProductViewHolder> adapterProduct;
     Query productQuery;
 
+
     TextView textCartItemCount;
     int mCartItemCount = 10;
     /*VIEWPAGER*/

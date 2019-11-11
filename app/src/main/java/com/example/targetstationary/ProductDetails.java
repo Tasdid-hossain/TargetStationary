@@ -24,6 +24,7 @@ import com.example.targetstationary.Model.ImageListModel;
 import com.example.targetstationary.Model.OrderModel;
 import com.example.targetstationary.Model.ProductModel;
 import com.example.targetstationary.Model.Rating;
+import com.example.targetstationary.ViewHolder.CommentAdapter;
 import com.example.targetstationary.ViewHolder.MyPager;
 import com.example.targetstationary.database.Database;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -55,6 +56,10 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
     private FirebaseAuth mAuth;
     FirebaseUser currentUser;
 
+    CommentAdapter commentAdapter;
+    RecyclerView recyclerView_comment;
+    RecyclerView.LayoutManager layoutManager;
+
     /*VIEWPAGER*/
     private ViewPager viewPager;
     private CircleIndicator circleIndicator;
@@ -83,6 +88,11 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setTitle("Product Details");
         commentList = new ArrayList<>();
+
+        recyclerView_comment = (RecyclerView) findViewById(R.id.recycler_comments_details);
+        recyclerView_comment.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView_comment.setLayoutManager(layoutManager);
 
         /*Firebase init*/
         database = FirebaseDatabase.getInstance();
@@ -126,11 +136,14 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
             @Override
             public void onClick(View v) {
                 if(commentList!=null){
-                    Intent i = new Intent(ProductDetails.this, CommentActivity.class);
+                    /*Intent i = new Intent(ProductDetails.this, CommentActivity.class);
                     i.putStringArrayListExtra("commentList",commentList);
-                    startActivity(i);
+                    startActivity(i);*/
+                    loadComments();
                 }
-
+                else{
+                    Toast.makeText(ProductDetails.this, "There's no feedback", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -152,6 +165,13 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
                 }
             }
         });
+
+    }
+
+    private void loadComments() {
+        commentAdapter = new CommentAdapter(commentList, this);
+        commentAdapter.notifyDataSetChanged();
+        recyclerView_comment.setAdapter(commentAdapter);
     }
 
     private void loadRating(String productID) {

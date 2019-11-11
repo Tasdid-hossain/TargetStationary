@@ -35,14 +35,14 @@ public class CommentActivity extends AppCompatActivity {
         recyclerView_comment.setLayoutManager(layoutManager);
 
         commnetList = getIntent().getStringArrayListExtra("commentList");
-        loadComments();
+        //loadComments();
     }
 
-    private void loadComments() {
+    /*private void loadComments() {
         commentAdapter = new CommentAdapter(commnetList, this);
         commentAdapter.notifyDataSetChanged();
         recyclerView_comment.setAdapter(commentAdapter);
-    }
+    }*/
 
     @Override
     public boolean onSupportNavigateUp() {

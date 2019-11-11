@@ -18,9 +18,9 @@ import java.util.ArrayList;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder>{
     private ArrayList<String> listData = new ArrayList<>();
-    private CommentActivity context;
+    private ProductDetails context;
 
-    public CommentAdapter(ArrayList<String> listData, CommentActivity c) {
+    public CommentAdapter(ArrayList<String> listData, ProductDetails c) {
         this.listData = listData;
         this.context = c;
     }
