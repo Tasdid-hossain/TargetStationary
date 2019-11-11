@@ -8,6 +8,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -52,7 +53,7 @@ public class CategoryActivity extends AppCompatActivity {
     Query categoryQuery;
 
     RecyclerView recycler_categories;
-    RecyclerView.LayoutManager layoutManager;
+    GridLayoutManager layoutManager;
     FirebaseRecyclerAdapter<CategoryModel, CategoryViewHolder> adapter;
 
     @Override
@@ -75,9 +76,9 @@ public class CategoryActivity extends AppCompatActivity {
 
         /*Load category*/
         recycler_categories = (RecyclerView) findViewById(R.id.recycler_categories);
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new GridLayoutManager(this,2);
         recycler_categories.setHasFixedSize(true);
-        recycler_categories.setLayoutManager(new GridLayoutManager(this,2));
+        recycler_categories.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
 
         loadCategory();
 

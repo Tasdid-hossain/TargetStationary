@@ -1,27 +1,25 @@
 package com.example.targetstationary;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import me.relex.circleindicator.CircleIndicator;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.targetstationary.Cart.CartActivity;
-import com.example.targetstationary.Home.MainActivity;
 import com.example.targetstationary.Model.ImageListModel;
 import com.example.targetstationary.Model.OrderModel;
 import com.example.targetstationary.Model.ProductModel;
@@ -38,13 +36,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 import com.stepstone.apprating.AppRatingDialog;
 import com.stepstone.apprating.listener.RatingDialogListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ProductDetails extends AppCompatActivity implements RatingDialogListener {
 
@@ -52,7 +48,7 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
    // ImageView singleProduct_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
     ElegantNumberButton numberButton;
-    Button cartBtn;
+    Button cartBtn,feedbackBtn;
     ProductModel currentProduct;
     FloatingActionButton btnRating;
     RatingBar ratingBar;
@@ -64,12 +60,13 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
     private CircleIndicator circleIndicator;
     private MyPager myPager;
 
-
+    ArrayList<String> commentList;
     String ProductID = "";
 
     FirebaseDatabase database;
     DatabaseReference singleProduct;
     DatabaseReference ratingTable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +82,14 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setTitle("Product Details");
-
+        commentList = new ArrayList<>();
 
         /*Firebase init*/
         database = FirebaseDatabase.getInstance();
         singleProduct = database.getReference("Product");
         ratingTable = database.getReference("Rating");
 
+        feedbackBtn = (Button) findViewById(R.id.btnFeedback);
         btnRating = (FloatingActionButton) findViewById(R.id.btn_rating);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         btnRating.setOnClickListener(new View.OnClickListener() {
@@ -109,18 +107,11 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
         cartBtn =(Button) findViewById(R.id.btnCart);
 
 
-//        singleProduct_image = (ImageView) findViewById(R.id.image_singleProduct);!!!!!!!!!!!!!!!!!!
-
-      /*  imageView1=(ImageView) findViewById(R.id.imageview1);
-        imageView2=(ImageView) findViewById(R.id.imageview2);
-        imageView3=(ImageView) findViewById(R.id.imageview3);
-        imageView4=(ImageView) findViewById(R.id.imageview4);*/
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppbar);
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpendedAppbar);
 
-        /**/
 
         /*Get ProductID from intent*/
         if(getIntent()!= null)
@@ -131,6 +122,18 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
             loadRating(ProductID);
         }
 
+        feedbackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(commentList!=null){
+                    Intent i = new Intent(ProductDetails.this, CommentActivity.class);
+                    i.putStringArrayListExtra("commentList",commentList);
+                    startActivity(i);
+                }
+
+
+            }
+        });
         cartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,8 +144,8 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
                     new Database(getBaseContext()).addToCart(new OrderModel(
                             ProductID, currentProduct.getName(), numberButton.getNumber() ,currentProduct.getPrice(), "10"
                     ));
-
-                    Toast.makeText(ProductDetails.this, "Added to cart", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDetails.this, commentList.get(0),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ProductDetails.this, "Added to cart", Toast.LENGTH_SHORT).show();
                     Intent prodDetails = new Intent(ProductDetails.this, CartActivity.class);
                     startActivity(prodDetails);
 
@@ -159,6 +162,7 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapShot:dataSnapshot.getChildren()){
                     Rating item = postSnapShot.getValue(Rating.class);
+                    commentList.add(item.getComment());
                     sum += Integer.parseInt(item.getRateValue());
                     count++;
                 }
@@ -189,7 +193,6 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
                 .setWindowAnimation(R.style.RatingDialogFadeAnim)
                 .create(ProductDetails.this).show();
     }
-
 
     private void getDetailProduct(String productID) {
         singleProduct.child(productID).addValueEventListener(new ValueEventListener() {
