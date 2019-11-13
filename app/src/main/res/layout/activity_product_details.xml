@@ -136,10 +136,9 @@
                         app:finalNumber="30"
                         />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content">
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -150,12 +149,13 @@
                         <Button
                             android:id="@+id/btnFeedback"
                             android:layout_width="wrap_content"
-                            android:layout_marginLeft="50dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="5dp"
                             android:layout_height="wrap_content"
                             style="@style/Widget.AppCompat.Button.Colored"
                             android:text="View Feedback" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                 </LinearLayout>
 
