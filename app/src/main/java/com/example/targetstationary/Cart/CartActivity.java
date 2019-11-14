@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +36,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -63,6 +67,16 @@ public class CartActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     String uAddress;
 
+    /*Add payment*/
+    private static final int REQUEST_CODE = 1234;
+    String API_GET_TOKEN="Your token url";
+    String API_CHECKOUT="Your checkout url";
+    String token,amount;
+    HashMap<String,String> paramsHash;
+    Button btn_pay;
+    EditText edit_amount;
+    LinearLayout group_payment;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +106,12 @@ public class CartActivity extends AppCompatActivity {
         place_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentUser==null)
+                if(currentUser==null){
                     Toast.makeText(CartActivity.this, "Please login to place the order", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(CartActivity.this, WalletActivity.class);
+                    startActivity(i);
+                }
+
                 else
                 {
                     getAddress();
@@ -158,7 +176,9 @@ public class CartActivity extends AppCompatActivity {
         });
 
         loadListProduct();
+
     }
+
 
     private void getAddress(){
         userAddress.child(currentUser.getUid()).child("address").addValueEventListener(new ValueEventListener() {
