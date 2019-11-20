@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,7 +58,7 @@ public class SignIn extends AppCompatActivity {
     private static final int MY_REQUEST_CODE = 1971;
     List<AuthUI.IdpConfig> providers;
     Button btn_sign_out,update,btn_vieworder;
-    TextView fName, total_orders, user_email,  user_address, user_payment, user_phone, total_favorites, user_type;
+    TextView fName, total_orders, user_email,  user_address, user_phone, total_favorites, user_type;
     ImageView profile_pic;
     private static final String TAG = "AccountActivity";
     private static final int ACTIVITY_NUM =4;
@@ -87,7 +88,6 @@ public class SignIn extends AppCompatActivity {
         user_email = (TextView) findViewById(R.id.user_email);
         user_phone = (TextView) findViewById(R.id.user_phone);
         user_address = (TextView) findViewById(R.id.user_address);
-        user_payment = (TextView) findViewById(R.id.user_payment);
         total_orders = (TextView) findViewById(R.id.total_orders);
         btn_sign_out = (Button) findViewById(R.id.btn_sign_out);
         btn_vieworder = (Button) findViewById(R.id.btn_viewOrders);
@@ -142,47 +142,15 @@ public class SignIn extends AppCompatActivity {
                 new AuthUI.IdpConfig.GoogleBuilder().build()
         );
 
+        check();
     }
 
-    private void showSignInOptions() {
-        startActivityForResult(
-                AuthUI.getInstance().createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setTheme(R.style.LoginTheme)
-                        .setLogo(R.drawable.targetlogo).setTosAndPrivacyPolicyUrls("https://target.com.my/terms-and-conditions.php"
-                ,"https://target.com.my/privacy-policy.php")
-                .build(),MY_REQUEST_CODE
-        );
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == MY_REQUEST_CODE){
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-            if(resultCode==RESULT_OK){
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                Toast.makeText(this, ""+user.getEmail(),Toast.LENGTH_SHORT).show();
-                btn_sign_out.setEnabled(true);
-
-            }
-            else{
-                if(response==null){
-                    finish();
-                }
-            }
-        }
-    }
-
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+    private void check() {
         currentUser = mAuth.getCurrentUser();
         if(currentUser==null)
+        {
             showSignInOptions();
+        }
         else
         {
             fName.setText(currentUser.getDisplayName());
@@ -210,6 +178,56 @@ public class SignIn extends AppCompatActivity {
         }
     }
 
+    private void showSignInOptions() {
+        startActivityForResult(
+                AuthUI.getInstance().createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setTheme(R.style.LoginTheme)
+                        .setLogo(R.drawable.targetlogo).setTosAndPrivacyPolicyUrls("https://target.com.my/terms-and-conditions.php"
+                ,"https://target.com.my/privacy-policy.php")
+                .build(),MY_REQUEST_CODE
+        );
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == MY_REQUEST_CODE){
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+            if(resultCode==RESULT_OK){
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                Toast.makeText(this, ""+user.getEmail(),Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(SignIn.this, MainActivity.class);
+                startActivity(i);
+                finish();
+                btn_sign_out.setEnabled(true);
+
+            }
+            else{
+                if(response==null){
+                    finish();
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            startActivity(new Intent(SignIn.this, MainActivity.class));
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+
+    }
+
     @Override
     public void onBackPressed() {
         Intent i = new Intent(SignIn.this, MainActivity.class);
@@ -232,7 +250,6 @@ public class SignIn extends AppCompatActivity {
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
                 if(userModel!=null){
                     user_address.setText(userModel.getAddress());
-                    user_payment.setText(userModel.getPayment());
                     user_phone.setText(userModel.getPhone());
                     if(currentUser.getPhotoUrl()!=null)
                         Picasso.get().load(currentUser.getPhotoUrl().toString()).into(profile_pic);
@@ -242,7 +259,6 @@ public class SignIn extends AppCompatActivity {
                 else{
                     user_address.setText("Please update address!");
                     user_phone.setText("Please update phone number!");
-                    user_payment.setText("Please enter payment method!");
                     total_favorites.setText("No Favorite");
                     user_type.setText("Update your type");
                     //Picasso.get().load(currentUser.getPhotoUrl().toString()).into(profile_pic);

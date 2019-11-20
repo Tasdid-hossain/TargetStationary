@@ -3,12 +3,15 @@ package com.example.targetstationary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import me.relex.circleindicator.CircleIndicator;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,6 +63,10 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
     RecyclerView recyclerView_comment;
     RecyclerView.LayoutManager layoutManager;
 
+    TextView textCartItemCount;
+    int mCartItemCount = 10;
+    Database localDB;
+
     /*VIEWPAGER*/
     private ViewPager viewPager;
     private CircleIndicator circleIndicator;
@@ -88,6 +95,8 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setTitle("Product Details");
         commentList = new ArrayList<>();
+        localDB = new Database(this);
+
 
         recyclerView_comment = (RecyclerView) findViewById(R.id.recycler_comments_details);
         recyclerView_comment.setHasFixedSize(true);
@@ -245,14 +254,55 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
         });
     }
 
+
     /*Toolbar*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toptoolmenu,menu);
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.toptoolmenu, menu);
+
+        final MenuItem menuItem = menu.findItem(R.id.ic_cartTop);
+
+        View actionView = MenuItemCompat.getActionView(menuItem);
+        textCartItemCount = (TextView) actionView.findViewById(R.id.cart_badge);
+
+        setupBadge();
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOptionsItemSelected(menuItem);
+            }
+        });
+
+        return true;
     }
 
+    public int getItemsCount() {
+        String countQuery = "SELECT  * FROM " + "OrderDetails";
+        SQLiteDatabase db = localDB.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    private void setupBadge() {
+
+        if (textCartItemCount != null) {
+            if (mCartItemCount == 0) {
+                if (textCartItemCount.getVisibility() != View.GONE) {
+                    textCartItemCount.setVisibility(View.GONE);
+                }
+            } else {
+                textCartItemCount.setText(String.valueOf(Math.min(getItemsCount(), 99)));
+                localDB.close();
+                if (textCartItemCount.getVisibility() != View.VISIBLE) {
+                    textCartItemCount.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.ic_cartTop){
@@ -263,6 +313,7 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
         else
             return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {

@@ -82,11 +82,11 @@ public class MainActivity extends AppCompatActivity {
     /*For UsefulInfo data*/
     DatabaseReference preschool, collegeuni, primaryschool, secondaryschool;
     public static ArrayList<ProductModel> productsPreschool = new ArrayList<ProductModel>();
+    public static ArrayList<String> productPreschoolID = new ArrayList<String>();
     public static ArrayList<ProductModel> productsPrimary = new ArrayList<ProductModel>();
     public static ArrayList<ProductModel> productsSecondary = new ArrayList<ProductModel>();
     public static ArrayList<ProductModel> productsCollege = new ArrayList<ProductModel>();
 
-    /*Commenting from Roderick's  PC*/
     Database localDB;
     private StaggeredGridLayoutManager mLayoutManager;
 
@@ -118,8 +118,10 @@ public class MainActivity extends AppCompatActivity {
         scecondaryschoolImage = (ImageView) findViewById(R.id.secondaryschoolImage);
 
         /*LOAD DATA*/
-        if(productsPreschool!=null)
+        if(productsPreschool!=null){
             productsPreschool.clear();
+            productPreschoolID.clear();
+        }
         if(productsPrimary!=null)
             productsPrimary.clear();
         if(productsSecondary!=null)
@@ -149,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 /*Goes into PreSchool*/
                 Intent Preschool = new Intent(MainActivity.this, PreSchool.class);
                 Preschool.putParcelableArrayListExtra("List", productsPrimary);
-
+                Preschool.putStringArrayListExtra("IDList",productPreschoolID);
                 startActivity(Preschool);
             }
         });
@@ -390,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot productDataSnap : productList) {
                     String productID = productDataSnap.getKey();
                     DatabaseReference prodRef = FirebaseDatabase.getInstance().getReference();
-
+                    productPreschoolID.add(productID);
                     prodRef.child("Product").child(productID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -15,11 +15,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.example.targetstationary.Home.MainActivity;
+import com.example.targetstationary.Interface.ItemClickListener;
 import com.example.targetstationary.Model.OrderModel;
 import com.example.targetstationary.Model.ProductModel;
+import com.example.targetstationary.OrderActivity;
+import com.example.targetstationary.OrderDetailsActivity;
+import com.example.targetstationary.ProductDetails;
 import com.example.targetstationary.R;
 import com.example.targetstationary.Utils.BottomNavigationViewHelper;
 import com.example.targetstationary.ViewHolder.CartAdapter;
@@ -48,6 +53,7 @@ public class PreSchool extends AppCompatActivity {
     RecyclerView recyclerViewPreSchool;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<ProductModel> object;
+    ArrayList<String> prodIds;
     ProdAdapter adapter;
 
     @Override
@@ -66,10 +72,11 @@ public class PreSchool extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        if(object==null)
+        if(object==null){
             object = intent.getExtras().getParcelableArrayList("List");
-        /*
-        loadProducts();*/
+            prodIds = intent.getStringArrayListExtra("IDList");
+        }
+
 
         createView(object);
     }
@@ -137,6 +144,15 @@ public class PreSchool extends AppCompatActivity {
             holder.textProductName.setText(listData.get(position).getName());
             Picasso.get().load(listData.get(position).getImage()).into(holder.imageViewProduct);
             holder.textProductPrice.setText(listData.get(position).getPrice());
+
+            holder.setItemClickListener(new ItemClickListener() {
+                @Override
+                public void onClick(View view, int position, boolean isLongClick) {
+                   Intent i = new Intent(PreSchool.this, ProductDetails.class);
+                   i.putExtra("ProductID", prodIds.get(position));
+                   startActivity(i);
+                }
+            });
         }
 
 

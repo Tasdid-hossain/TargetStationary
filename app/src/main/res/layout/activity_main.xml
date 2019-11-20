@@ -108,7 +108,7 @@
                 android:layout_below="@id/textMain"
                 android:layout_margin="10dp"
                 android:layout_toRightOf="@id/secondaryschoolImage"
-                android:src="@drawable/primaryschool"/>
+                android:src="@drawable/primaryschool2"/>
 
 
             <androidx.recyclerview.widget.RecyclerView

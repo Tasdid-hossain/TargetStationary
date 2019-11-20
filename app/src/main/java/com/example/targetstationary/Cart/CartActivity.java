@@ -123,7 +123,7 @@ public class CartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(currentUser==null){
                     Toast.makeText(CartActivity.this, "Please login to place the order", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(CartActivity.this, WalletActivity.class);
+                    Intent i = new Intent(CartActivity.this, SignIn.class);
                     startActivity(i);
                 }
 
