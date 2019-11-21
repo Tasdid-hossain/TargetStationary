@@ -267,7 +267,16 @@
                     android:layout_marginLeft="25dp"
                     android:id="@+id/btn_update"
                     android:background="@drawable/buttonstylegredient"
-                    android:text="Update"/>
+                    android:text="Edit"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="25dp"
+                    android:id="@+id/btn_call"
+                    android:background="@drawable/buttonstylegredient"
+                    android:text="Call"/>
             </LinearLayout>
         </LinearLayout>
         </ScrollView>

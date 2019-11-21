@@ -1,8 +1,11 @@
 package com.example.targetstationary;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,10 +46,14 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static android.Manifest.permission.CALL_PHONE;
+import static android.view.View.VISIBLE;
 
 public class OrderActivity extends AppCompatActivity {
     private static final String TAG = "OrderActivity";
@@ -121,6 +128,25 @@ public class OrderActivity extends AppCompatActivity {
 
                 holder.orderPrice.setText(model.getTotal());
                 holder.orderStatus.setText(model.getStatus());
+                if(model.getStatus().equals("Delivered")){
+                    holder.btn_refund.show();
+                    holder.btn_refund.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent callIntent = new Intent(Intent.ACTION_CALL);
+                            callIntent.setData(Uri.parse("tel:123456789"));
+                            if (ContextCompat.checkSelfPermission(getApplicationContext(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                                startActivity(callIntent);
+                            } else {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    requestPermissions(new String[]{CALL_PHONE}, 1);
+                                }
+                            }
+                        }
+                    });
+                }
+                else
+                    holder.btn_refund.hide();
 
 
 
@@ -205,8 +231,8 @@ public class OrderActivity extends AppCompatActivity {
             } else {
                 textCartItemCount.setText(String.valueOf(Math.min(getItemsCount(), 99)));
                 localDB.close();
-                if (textCartItemCount.getVisibility() != View.VISIBLE) {
-                    textCartItemCount.setVisibility(View.VISIBLE);
+                if (textCartItemCount.getVisibility() != VISIBLE) {
+                    textCartItemCount.setVisibility(VISIBLE);
                 }
             }
         }

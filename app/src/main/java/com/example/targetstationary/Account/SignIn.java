@@ -4,6 +4,7 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.targetstationary.Category.CategoryActivity;
 import com.example.targetstationary.CircleTransform;
@@ -18,8 +19,11 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -53,11 +57,13 @@ import com.squareup.picasso.Picasso;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.Manifest.permission.CALL_PHONE;
+
 public class SignIn extends AppCompatActivity {
 
     private static final int MY_REQUEST_CODE = 1971;
     List<AuthUI.IdpConfig> providers;
-    Button btn_sign_out,update,btn_vieworder;
+    Button btn_sign_out,update,btn_vieworder, btn_call;
     TextView fName, total_orders, user_email,  user_address, user_phone, total_favorites, user_type;
     ImageView profile_pic;
     private static final String TAG = "AccountActivity";
@@ -93,6 +99,22 @@ public class SignIn extends AppCompatActivity {
         btn_vieworder = (Button) findViewById(R.id.btn_viewOrders);
         total_favorites = (TextView) findViewById(R.id.total_favorites);
         user_type = (TextView) findViewById(R.id.user_type);
+        btn_call = (Button) findViewById(R.id.btn_call);
+
+        btn_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:123456789"));
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(callIntent);
+                } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(new String[]{CALL_PHONE}, 1);
+                    }
+                }
+            }
+        });
 
         btn_sign_out.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -166,7 +166,7 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
                     new Database(getBaseContext()).addToCart(new OrderModel(
                             ProductID, currentProduct.getName(), numberButton.getNumber() ,currentProduct.getPrice(), "10"
                     ));
-                    Toast.makeText(ProductDetails.this, commentList.get(0),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(ProductDetails.this, commentList.get(0),Toast.LENGTH_SHORT).show();
                     //Toast.makeText(ProductDetails.this, "Added to cart", Toast.LENGTH_SHORT).show();
                     Intent prodDetails = new Intent(ProductDetails.this, CartActivity.class);
                     startActivity(prodDetails);
