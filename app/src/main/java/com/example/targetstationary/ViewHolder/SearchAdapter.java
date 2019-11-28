@@ -27,6 +27,7 @@ public class SearchAdapter extends RecyclerView.Adapter <SearchAdapter.SearchVie
     ArrayList <String> NameList;
     ArrayList <String> PriceList;
     ArrayList <String> IdList;
+    ArrayList <String> descList;
 
     class SearchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView prodImage;
@@ -53,12 +54,13 @@ public class SearchAdapter extends RecyclerView.Adapter <SearchAdapter.SearchVie
     }
 
     public SearchAdapter(Context context, ArrayList<String> imageList, ArrayList<String> nameList, ArrayList<String> priceList,
-                         ArrayList<String> idList) {
+                         ArrayList<String> idList, ArrayList<String> DescList) {
         this.context = context;
         ImageList = imageList;
         NameList = nameList;
         PriceList = priceList;
         IdList = idList;
+        descList = DescList;
     }
 
     @NonNull

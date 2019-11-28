@@ -64,8 +64,8 @@
                 android:layout_width="66dp"
                 android:layout_height="66dp"
                 app:civ_border_width="2dp"
-                app:civ_border_color="#1d76f2"
-                app:civ_circle_background_color="#689ce3"
+                app:civ_border_color="#dbc486"
+                app:civ_circle_background_color="#ffe9ad"
                 android:layout_below="@id/textMain"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
@@ -102,13 +102,13 @@
                 android:id="@+id/primaryschoolImage"
                 android:layout_width="66dp"
                 android:layout_height="66dp"
-                app:civ_border_color="#1d76f2"
-                app:civ_circle_background_color="#689ce3"
+                app:civ_border_color="#dbc486"
+                app:civ_circle_background_color="#ffe9ad"
                 app:civ_border_width="2dp"
                 android:layout_below="@id/textMain"
                 android:layout_margin="10dp"
                 android:layout_toRightOf="@id/secondaryschoolImage"
-                android:src="@drawable/primaryschool2"/>
+                android:src="@drawable/primaryschool"/>
 
 
             <androidx.recyclerview.widget.RecyclerView

@@ -134,7 +134,7 @@ public class OrderActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
-                            callIntent.setData(Uri.parse("tel:123456789"));
+                            callIntent.setData(Uri.parse("tel:082242358"));
                             if (ContextCompat.checkSelfPermission(getApplicationContext(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                                 startActivity(callIntent);
                             } else {
@@ -159,7 +159,6 @@ public class OrderActivity extends AppCompatActivity {
                         bundle.putString("status",model.getStatus());
                         i.putExtras(bundle);
                         startActivity(i);
-                        Toast.makeText(OrderActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

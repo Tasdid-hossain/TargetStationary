@@ -58,7 +58,7 @@
         app:pressedTranslationZ="12dp"
         android:backgroundTint="@color/white"
         android:id="@+id/btn_rating"
-        android:src="@drawable/ic_star_black_24dp"
+        android:src="@drawable/star"
         app:layout_anchorGravity="bottom|right|start"
         app:layout_anchor="@id/appbarLayout"
         app:useCompatPadding="true"/>

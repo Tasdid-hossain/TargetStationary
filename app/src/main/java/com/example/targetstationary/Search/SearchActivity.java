@@ -50,6 +50,7 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList <String> NameList;
     ArrayList <String> PriceList;
     ArrayList <String> idList;
+    ArrayList <String> descList;
     SearchAdapter searchAdapter;
 
     @Override
@@ -77,6 +78,7 @@ public class SearchActivity extends AppCompatActivity {
         NameList = new ArrayList<>();
         PriceList = new ArrayList<>();
         idList = new ArrayList<>();
+        descList = new ArrayList<>();
 
         search_edit_text.addTextChangedListener(new TextWatcher() {
             @Override
@@ -98,6 +100,7 @@ public class SearchActivity extends AppCompatActivity {
                     NameList.clear();
                     PriceList.clear();
                     idList.clear();
+                    descList.clear();
                     searchRecyclerView.removeAllViews();
                 }
             }
@@ -116,6 +119,7 @@ public class SearchActivity extends AppCompatActivity {
                 NameList.clear();
                 PriceList.clear();
                 idList.clear();
+                descList.clear();
                 searchRecyclerView.removeAllViews();
 
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()){
@@ -123,6 +127,7 @@ public class SearchActivity extends AppCompatActivity {
                     String Image = snapshot.child("Image").getValue(String.class);
                     String Price = snapshot.child("Price").getValue(String.class);
                     String Name = snapshot.child("Name").getValue(String.class);
+                    String Description = snapshot.child("Description").getValue(String.class);
 //                    Log.d(TAG, Name);
 
                     if(Name.toLowerCase().contains(searchedString.toLowerCase())){
@@ -130,6 +135,7 @@ public class SearchActivity extends AppCompatActivity {
                         NameList.add(Name);
                         PriceList.add(Price);
                         idList.add(ProductID);
+                        descList.add(Description);
                         counter++;
 
                     }else if (Price.toLowerCase().contains(searchedString.toLowerCase())){
@@ -137,12 +143,14 @@ public class SearchActivity extends AppCompatActivity {
                         NameList.add(Name);
                         PriceList.add(Price);
                         idList.add(ProductID);
+                        descList.add(Description);
                         counter++;
                     }else if (ProductID.toLowerCase().contains(searchedString.toLowerCase())){
                         ImageList.add(Image);
                         NameList.add(Name);
                         PriceList.add(Price);
                         idList.add(ProductID);
+                        descList.add(Description);
                         counter++;
                     }
                     if(counter==15){
@@ -150,7 +158,7 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 }
 
-                searchAdapter = new SearchAdapter(SearchActivity.this, ImageList, NameList, PriceList,idList);
+                searchAdapter = new SearchAdapter(SearchActivity.this, ImageList, NameList, PriceList,idList,descList);
                 searchRecyclerView.setAdapter(searchAdapter);
             }
 

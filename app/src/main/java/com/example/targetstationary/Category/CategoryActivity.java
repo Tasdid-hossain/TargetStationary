@@ -78,7 +78,7 @@ public class CategoryActivity extends AppCompatActivity {
         recycler_categories = (RecyclerView) findViewById(R.id.recycler_categories);
         layoutManager = new GridLayoutManager(this,2);
         recycler_categories.setHasFixedSize(true);
-        recycler_categories.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
+        recycler_categories.setLayoutManager(layoutManager);
 
         loadCategory();
 
@@ -102,7 +102,7 @@ public class CategoryActivity extends AppCompatActivity {
                         /*Get CategoryID and send to ProductActivity*/
                         Intent productIntent = new Intent(CategoryActivity.this, ProductListActivity.class);
                         productIntent.putExtra("CategoryID", adapter.getRef(position).getKey().toString());
-                        Toast.makeText(CategoryActivity.this, ""+adapter.getRef(position).getKey(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(CategoryActivity.this, ""+adapter.getRef(position).getKey(), Toast.LENGTH_SHORT).show();
 
                         startActivity(productIntent);
                      }

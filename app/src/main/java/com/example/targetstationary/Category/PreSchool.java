@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -56,6 +57,9 @@ public class PreSchool extends AppCompatActivity {
     ArrayList<String> prodIds;
     ProdAdapter adapter;
 
+    TextView textCartItemCount;
+    int mCartItemCount = 10;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +68,7 @@ public class PreSchool extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         preschool = database.getReference().child("UsefulInfo").child("PreSchool");
         preschoolQuery = preschool.orderByKey();
-
+        setupBottomNavigationView();
         recyclerViewPreSchool = (RecyclerView) findViewById(R.id.preschoolRecycler);
         recyclerViewPreSchool.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -168,5 +172,15 @@ public class PreSchool extends AppCompatActivity {
         super.onBackPressed();
         finish();
         object.clear();
+    }
+
+    /*BottomNavigationView Setup*/
+    private void setupBottomNavigationView(){
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavViewBar);
+        BottomNavigationViewHelper.enableNavigation(PreSchool.this,bottomNavigationView);
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.getItem(1);
+        menuItem.setChecked(true);
     }
 }

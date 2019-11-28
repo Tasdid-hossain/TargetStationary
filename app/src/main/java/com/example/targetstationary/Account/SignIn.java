@@ -105,7 +105,7 @@ public class SignIn extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:123456789"));
+                callIntent.setData(Uri.parse("tel:082242358"));
                 if (ContextCompat.checkSelfPermission(getApplicationContext(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                     startActivity(callIntent);
                 } else {
@@ -281,7 +281,7 @@ public class SignIn extends AppCompatActivity {
                 else{
                     user_address.setText("Please update address!");
                     user_phone.setText("Please update phone number!");
-                    total_favorites.setText("No Favorite");
+                    //total_favorites.setText("No Favorite");
                     user_type.setText("Update your type");
                     //Picasso.get().load(currentUser.getPhotoUrl().toString()).into(profile_pic);
                     if(currentUser.getPhotoUrl()!=null)

@@ -114,7 +114,10 @@ public class ProductDetails extends AppCompatActivity implements RatingDialogLis
         btnRating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showRatingDialog();
+                if(currentUser!=null)
+                    showRatingDialog();
+                else
+                    Toast.makeText(ProductDetails.this, "Please login to rate",Toast.LENGTH_SHORT).show();
             }
         });
 

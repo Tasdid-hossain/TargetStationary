@@ -67,7 +67,7 @@ public class ProductListActivity extends AppCompatActivity {
             CategoryID = getIntent().getStringExtra("CategoryID");
         if(!CategoryID.isEmpty())
         {
-            Toast.makeText(this, "got it", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "got it", Toast.LENGTH_SHORT).show();
             productQuery = productRef;
         }
 
